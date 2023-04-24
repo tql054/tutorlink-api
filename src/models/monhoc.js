@@ -15,7 +15,8 @@ module.exports = (sequelize, DataTypes) => {
   };
   MonHoc.init({
     mocHoc: DataTypes.STRING,
-    idLop: DataTypes.STRING
+    lopMin: DataTypes.INTEGER,
+    lopMax: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'MonHoc',

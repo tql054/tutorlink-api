@@ -16,10 +16,14 @@ module.exports = (sequelize, DataTypes) => {
   BaiDangHocVien.init({
     idBaiDang: DataTypes.INTEGER,
     trinhDoGiaSu: DataTypes.STRING,
+    kinhNghiem: DataTypes.STRING,
+    yeuCauKhac: DataTypes.STRING,
     diaChiDay: DataTypes.STRING,
     phuongXa: DataTypes.STRING,
-    sdt: DataTypes.STRING,
-    yeuCauKhac: DataTypes.STRING
+    hocVien: DataTypes.STRING(11),
+    giaSu: DataTypes.STRING(11),
+    monHoc: DataTypes.STRING,
+    trangThai: DataTypes.STRING 
   }, {
     sequelize,
     modelName: 'BaiDangHocVien',

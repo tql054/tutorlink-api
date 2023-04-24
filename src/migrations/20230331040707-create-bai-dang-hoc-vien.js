@@ -3,18 +3,18 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('BaiDangHocViens', {
       idBaiDang: {
-        type: Sequelize.INTEGER,
-        autoIncrement: false,
+        autoIncrement: true,
         allowNull: false,
         primaryKey: true,
-        references: {
-          model: 'BaiDangs', // name of Target model
-          key: 'id', // key in Target model that we're referencing
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        type: Sequelize.INTEGER
       },
       trinhDoGiaSu: {
+        type: Sequelize.STRING
+      },
+      kinhNghiem: {
+        type: Sequelize.STRING
+      },
+      yeuCauKhac: {
         type: Sequelize.STRING
       },
       diaChiDay: {
@@ -30,7 +30,7 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      sdt: {
+      hocVien: {
         type: Sequelize.STRING(11),
         allowNull: false,
         references: {
@@ -40,7 +40,37 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      yeuCauKhac: {
+      giaSu: {
+        type: Sequelize.STRING(11),
+        allowNull: true,
+        references: {
+          model: 'GiaSus', // name of Target model
+          key: 'soDienThoai', // key in Target model that we're referencing
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      monHoc: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        references: {
+          model: 'MonHocs', // name of Target model
+          key: 'mocHoc', // key in Target model that we're referencing
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      khoi: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        references: {
+          model: 'Khois', // name of Target model
+          key: 'khoi', // key in Target model that we're referencing
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      trangThai: {
         type: Sequelize.STRING
       },
       createdAt: {

@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       sdtGiaSu: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(11),
         references: {
           model: 'GiaSus', // name of Target model
           key: 'soDienThoai', // key in Target model that we're referencing
@@ -26,7 +26,7 @@ module.exports = {
       tinhtrang: {
         type: Sequelize.STRING
       },
-      createdAt: {
+      createdAt: {  
         allowNull: false,
         type: Sequelize.DATE
       },

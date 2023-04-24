@@ -2,23 +2,19 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('MonHocs', {
-      id: {
+      mocHoc: {
         allowNull: false,
-        autoIncrement: true,
+        autoIncrement: false,
         primaryKey: true,
+        type: Sequelize.STRING  
+      },
+      lopMin: {
+        allowNull: true,
         type: Sequelize.INTEGER
       },
-      mocHoc: {
-        type: Sequelize.STRING(100)  
-      },
-      idLop: {
-        references: {
-          model: 'DanhMucLops', // name of Target model
-          key: 'tenLop', // key in Target model that we're referencing
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
-        type: Sequelize.STRING
+      lopMax: {
+        allowNull: true,
+        type: Sequelize.INTEGER 
       },
       createdAt: {
         allowNull: false,

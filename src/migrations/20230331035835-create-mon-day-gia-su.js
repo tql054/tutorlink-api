@@ -19,10 +19,21 @@ module.exports = {
       monDay: {
         allowNull: false,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         references: {
           model: 'MonHocs', // name of Target model
-          key: 'id', // key in Target model that we're referencing
+          key: 'mocHoc', // key in Target model that we're referencing
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      khoi: {
+        allowNull: false,
+        primaryKey: true,
+        type: Sequelize.STRING,
+        references: {
+          model: 'Khois', // name of Target model
+          key: 'khoi', // key in Target model that we're referencing
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
