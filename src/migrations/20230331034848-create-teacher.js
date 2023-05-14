@@ -1,35 +1,44 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('GiaSus', {
-      soDienThoai: {
+    await queryInterface.createTable('Teachers', {
+      phoneNumber: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.STRING(11),
         references: {
-          model: 'TaiKhoans', // name of Target model
-          key: 'soDienThoai', // key in Target model that we're referencing
+          model: 'Accounts', // name of Target model
+          key: 'phoneNumber', // key in Target model that we're referencing
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      hoTen: {
+      name: {
         type: Sequelize.STRING
       },
-      diaChi: {
+      address: {
         type: Sequelize.STRING
       },
-      phuongXa: {
-        type: Sequelize.STRING
+      idWard : {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Wards', // name of Target model
+          key: 'id', // key in Target model that we're referencing
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
-      cccd: {
+      identify: {
         allowNull: false,
         type: Sequelize.STRING(12),
       },
-      trinhdo: {
+      level: {
         type: Sequelize.STRING
       },
-      tinhTrang: {
+      experience: {
+        type: Sequelize.STRING
+      },
+      status: {
         type: Sequelize.STRING
       },
       createdAt: {
@@ -43,6 +52,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('GiaSus');
+    await queryInterface.dropTable('Teachers');
   }
 };

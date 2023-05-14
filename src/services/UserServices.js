@@ -1,14 +1,14 @@
 import db from '../models/index'
 
-let getUserByPhone = (phone) => {
+let getUserByPhone = (phoneNumber) => {
     const promise = new Promise(async function(resolve, reject) {
         try {
-            const user = await db.TaiKhoan.findOne({
+            const user = await db.Account.findOne({
                 attributes: {
-                    exclude: ['id']
+                    exclude: ['id', 'createdAt', 'updatedAt']
                 },
                 where: {
-                    soDienThoai: phone
+                    phoneNumber: phoneNumber
                 }
             })
             resolve(user)

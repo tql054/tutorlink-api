@@ -1,46 +1,55 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('HocViens', {
-      soDienThoai: {
+    await queryInterface.createTable('Students', {
+      phoneNumber: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.STRING(11),
         references: {
-          model: 'TaiKhoans', // name of Target model
-          key: 'soDienThoai', // key in Target model that we're referencing
+          model: 'Accounts', // name of Target model
+          key: 'phoneNumber', // key in Target model that we're referencing
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      hoTen: {
+      name: {
         type: Sequelize.STRING
       },
-      diaChi: {
+      address: {
         type: Sequelize.STRING
       },
-      phuongXa: {
-        type: Sequelize.STRING,
+      idWard : {
+        type: Sequelize.INTEGER,
         references: {
-          model: 'PhuongXas', // name of Target model
-          key: 'phuongXa', // key in Target model that we're referencing
+          model: 'Wards', // name of Target model
+          key: 'id', // key in Target model that we're referencing
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      lop: {
+      idClass: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Classes', // name of Target model
+          key: 'id', // key in Target model that we're referencing
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      schoolName: {
         type: Sequelize.STRING
       },
-      theHocSinh: {
+      studentCard: {
         type: Sequelize.STRING
       },
-      hocLuc: {
+      ability: {
         type: Sequelize.STRING
       },
-      bangDiem: {
+      transcript: {
         type: Sequelize.STRING
       },
-      tinhTrang: {
+      status: {
         type: Sequelize.STRING
       },
       createdAt: {
@@ -54,6 +63,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('HocViens');
+    await queryInterface.dropTable('Students');
   }
 };

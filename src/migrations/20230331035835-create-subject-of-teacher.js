@@ -4,36 +4,36 @@ const { INTEGER } = require("sequelize");
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('MonDayGiaSus', {
-      sdtGiaSu: {
+    await queryInterface.createTable('SubjectOfTeachers', {
+      teacherPhone: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.STRING(11),
         references: {
-          model: 'GiaSus', // name of Target model
-          key: 'soDienThoai', // key in Target model that we're referencing
+          model: 'Teachers', // name of Target model
+          key: 'phoneNumber', // key in Target model that we're referencing
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      monDay: {
+      idSubject: {
         allowNull: false,
         primaryKey: true,
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         references: {
-          model: 'MonHocs', // name of Target model
-          key: 'mocHoc', // key in Target model that we're referencing
+          model: 'Subjects', // name of Target model
+          key: 'id', // key in Target model that we're referencing
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      khoi: {
+      idClass: {
         allowNull: false,
         primaryKey: true,
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         references: {
-          model: 'Khois', // name of Target model
-          key: 'khoi', // key in Target model that we're referencing
+          model: 'Classes', // name of Target model
+          key: 'id', // key in Target model that we're referencing
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
@@ -49,6 +49,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('MonDayGiaSus');
+    await queryInterface.dropTable('SubjectOfTeachers');
   }
 };

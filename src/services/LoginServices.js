@@ -4,13 +4,13 @@ var jwt = require('jsonwebtoken')
 let getAllUser = () => {
     const promise = new Promise( async function(resolve, reject) {
         try {
-            let quyen = await db.TaiKhoan.findAll({
+            let role = await db.Account.findAll({
                 attributes: {
                     exclude: ['id']
                 },
                 raw: true
             })
-            resolve(quyen)
+            resolve(role)
         } catch (error) {
             reject(error)
         }
@@ -19,29 +19,30 @@ let getAllUser = () => {
     return promise
 }
 
-let handleLogin = (soDienThoai, matKhau) => {
+let handleLogin = (phoneNumber, password) => {
     const promise = new Promise( async function(resolve, reject) {
         try {
-            if(await checkUserPhone(soDienThoai)) {
-                let user =  await db.TaiKhoan.findOne({
+            if(await checkUserPhone(phoneNumber)) {
+                let user =  await db.Account.findOne({
                     attributes: {
                         exclude: ['id']
                     },
                     where: {
-                        soDienThoai
+                        phoneNumber
                     },
                     raw: true
                 })
                 // let check = await bcrypt.compareSync(password, user.password)
 
-                if(user.matKhau === matKhau) {
+                if(user.password === password) {
                     var token = jwt.sign({
-                        soDienThoai: user.soDienThoai
-                    }, 'sdt')
+                        phoneNumber: user.phoneNumber
+                    }, 'phoneNumber')
                     resolve({
                         errCode: 0,
                         message: 'OK',
-                        token: token
+                        token: token,
+                        role: user.role
                     })
                 } else {
                     resolve({
@@ -66,15 +67,15 @@ let handleLogin = (soDienThoai, matKhau) => {
     return promise
 }
 
-let checkUserPhone = async (soDienThoai='') => {
+let checkUserPhone = async (phoneNumber='') => {
     const promise = new Promise(async function(resolve, reject) {
         try {
-            let user = await db.TaiKhoan.findOne({
+            let user = await db.Account.findOne({
                 attributes: {
                     exclude: ['id']
                 },
                 where: {
-                    soDienThoai
+                    phoneNumber
                 }
             })
 

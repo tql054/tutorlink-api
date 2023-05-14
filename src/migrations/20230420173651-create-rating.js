@@ -1,60 +1,59 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('DanhGia', {
+    await queryInterface.createTable('Ratings', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      giaSu: {
+      teacherPhone: {
         type: Sequelize.STRING(11),
-        allowNull: true,
-        autoIncrement: false,
-        references: {
-          model: 'GiaSus', // name of Target model
-          key: 'soDienThoai', // key in Target model that we're referencing
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
-      hocVien: {
-        type: Sequelize.STRING(11),
-        allowNull: true,
-        autoIncrement: false,
-        references: {
-          model: 'HocViens', // name of Target model
-          key: 'soDienThoai', // key in Target model that we're referencing
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
-      khoi: {
-        allowNull: true,
-        type: Sequelize.STRING,
-        references: {
-          model: 'Khois', // name of Target model
-          key: 'khoi', // key in Target model that we're referencing
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-
-      },
-      monDay: {
         allowNull: false,
-        type: Sequelize.STRING,
+        autoIncrement: false,
+        primaryKey: true,
         references: {
-          model: 'MonHocs', // name of Target model
-          key: 'mocHoc', // key in Target model that we're referencing
+          model: 'Teachers', // name of Target model
+          key: 'phoneNumber', // key in Target model that we're referencing
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
+      },
+      studentPhone: {
+        type: Sequelize.STRING(11),
+        allowNull: true,
+        references: {
+          model: 'Students', // name of Target model
+          key: 'phoneNumber', // key in Target model that we're referencing
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      danhGia: {
+      idSubject: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Subjects', // name of Target model
+          key: 'id', // key in Target model that we're referencing
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      idClass: {
+        allowNull: true,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Classes', // name of Target model
+          key: 'id', // key in Target model that we're referencing
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      rating: {
         type: Sequelize.INTEGER
       },
-      binhLuan: {
+      comments: {
         type: Sequelize.TEXT
       },
       createdAt: {
@@ -68,6 +67,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('DanhGia');
+    await queryInterface.dropTable('Ratings');
   }
 };

@@ -1,29 +1,29 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('BangCaps', {
+    await queryInterface.createTable('Degrees', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      sdtGiaSu: {
+      teacherPhone: {
         type: Sequelize.STRING(11),
         references: {
-          model: 'GiaSus', // name of Target model
-          key: 'soDienThoai', // key in Target model that we're referencing
+          model: 'Teachers', // name of Target model
+          key: 'phoneNumber', // key in Target model that we're referencing
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      ngayThem: {
+      addedDate: {
         type: Sequelize.DATE
       },
-      ngayHetHan: {
+      expirationDate: {
         type: Sequelize.DATE
       },
-      tinhtrang: {
+      status: {
         type: Sequelize.STRING
       },
       createdAt: {  
@@ -37,6 +37,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('BangCaps');
+    await queryInterface.dropTable('Degrees');
   }
 };

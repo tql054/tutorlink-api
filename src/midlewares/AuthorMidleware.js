@@ -2,9 +2,8 @@ import UserServices from '../services/UserServices'
 var jwt = require('jsonwebtoken')
 let checkUser = async (req, res, next) => {
     try {
-        console.log(req.params.token)
         let token = req.params.token
-        let phone = jwt.verify(token, 'sdt').soDienThoai
+        let phone = jwt.verify(token, 'phoneNumber').phoneNumber
         let user = await UserServices.getUserByPhone(phone)
         if(user) {
             req.data = user
@@ -23,14 +22,6 @@ let checkUser = async (req, res, next) => {
     }
 }
 
-
-let checkStudent = async () => {
-    try {
-
-    } catch (e) {
-
-    }
-}
 
 module.exports = {
     checkUser

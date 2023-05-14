@@ -1,20 +1,24 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('PhuongXas', {
-      phuongXa: {
+    await queryInterface.createTable('Accounts', {
+      phoneNumber: {
         allowNull: false,
+        autoIncrement: false,
         primaryKey: true,
+        type: Sequelize.STRING(11)
+      },
+      password: {
         type: Sequelize.STRING
       },
-      quanHuyen: {
-        type: Sequelize.STRING,
+      role: {
         references: {
-          model: 'QuanHuyens', // name of Target model
-          key: 'quanHuyen', // key in Target model that we're referencing
+          model: 'Roles', // name of Target model
+          key: 'role', // key in Target model that we're referencing
         },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -27,6 +31,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('PhuongXas');
+    await queryInterface.dropTable('Accounts');
   }
 };

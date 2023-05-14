@@ -1,18 +1,22 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('MonHocs', {
-      mocHoc: {
+    await queryInterface.createTable('Subjects', {
+      id: {
         allowNull: false,
-        autoIncrement: false,
+        autoIncrement: true,
         primaryKey: true,
+        type: Sequelize.INTEGER  
+      },
+      subject: {
+        allowNull: false,
         type: Sequelize.STRING  
       },
-      lopMin: {
+      minClass: {
         allowNull: true,
         type: Sequelize.INTEGER
       },
-      lopMax: {
+      maxClass: {
         allowNull: true,
         type: Sequelize.INTEGER 
       },
@@ -27,6 +31,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('MonHocs');
+    await queryInterface.dropTable('Subjects');
   }
 };

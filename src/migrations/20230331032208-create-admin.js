@@ -2,18 +2,18 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Admins', {
-      soDienThoai: {
+      phoneNumber: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.STRING(11),
         references: {
-          model: 'TaiKhoans', // name of Target model
-          key: 'soDienThoai', // key in Target model that we're referencing
+          model: 'Accounts', // name of Target model
+          key: 'phoneNumber', // key in Target model that we're referencing
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      hoTen: {
+      name: {
         type: Sequelize.STRING
       },
       createdAt: {

@@ -1,76 +1,76 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('BaiDangHocViens', {
-      idBaiDang: {
+    await queryInterface.createTable('StudentPosts', {
+      id: {
         autoIncrement: true,
         allowNull: false,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      trinhDoGiaSu: {
+      teacherLevel: {
         type: Sequelize.STRING
       },
-      kinhNghiem: {
+      teacherExperience: {
         type: Sequelize.STRING
       },
-      yeuCauKhac: {
+      otherRequires: {
         type: Sequelize.STRING
       },
-      diaChiDay: {
+      address: {
         type: Sequelize.STRING
       },
-      phuongXa: {
+      idWard: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         references: {
-          model: 'PhuongXas', // name of Target model
-          key: 'phuongXa', // key in Target model that we're referencing
+          model: 'Wards', // name of Target model
+          key: 'id', // key in Target model that we're referencing
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      hocVien: {
+      studentPhone: {
         type: Sequelize.STRING(11),
         allowNull: false,
         references: {
-          model: 'HocViens', // name of Target model
-          key: 'soDienThoai', // key in Target model that we're referencing
+          model: 'Students', // name of Target model
+          key: 'phoneNumber', // key in Target model that we're referencing
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      giaSu: {
+      teacherPhone: {
         type: Sequelize.STRING(11),
         allowNull: true,
         references: {
-          model: 'GiaSus', // name of Target model
-          key: 'soDienThoai', // key in Target model that we're referencing
+          model: 'Teachers', // name of Target model
+          key: 'phoneNumber', // key in Target model that we're referencing
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      monHoc: {
+      idSubject: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         references: {
-          model: 'MonHocs', // name of Target model
-          key: 'mocHoc', // key in Target model that we're referencing
+          model: 'Subjects', // name of Target model
+          key: 'id', // key in Target model that we're referencing
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      khoi: {
+      idClass: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         references: {
-          model: 'Khois', // name of Target model
-          key: 'khoi', // key in Target model that we're referencing
+          model: 'Classes', // name of Target model
+          key: 'id', // key in Target model that we're referencing
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      trangThai: {
+      status: {
         type: Sequelize.STRING
       },
       createdAt: {
@@ -84,6 +84,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('BaiDangHocViens');
+    await queryInterface.dropTable('StudentPosts');
   }
 };
