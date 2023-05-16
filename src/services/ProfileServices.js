@@ -3,15 +3,17 @@ const { QueryTypes } = require('sequelize');
 let getStudentHomeData = (phoneNumber='') => {
     const promise = new Promise(async function(resolve, reject) {
         try {
-            const data = await db.Student.findOne({
-                attributes: {
-                    exclude: ['id', 'createAt', 'updateAt']
-                },
-                where: {
-                    phoneNumber
-                }
-            })
-            resolve(data) // alternative by data objects
+            let query = `   select "phoneNumber" , "name" , "address" , w."wardName" , d."districtName" , c."className" , "schoolName" , "studentCard" , "ability" , "status"
+                            from 	"Students" s  , "Wards" w , "Districts" d , "Classes" c 
+                            where 	s."idWard" = w.id and
+                                    w."idDistrict" = d.id and
+                                    s."idClass" = c.id  and 
+                                    "phoneNumber" = '${phoneNumber}' `
+            const data =  await db.sequelize.query(
+                query
+                ,{ type: QueryTypes.SELECT }
+            )
+            resolve(data[0])
         } catch(e) {
             reject(e)
         }
@@ -22,14 +24,17 @@ let getStudentHomeData = (phoneNumber='') => {
 let getTeacherHomeData = (phoneNumber='') => {
     const promise = new Promise(async function(resolve, reject) {
         try {
-            let query = `   select "phoneNumber" , "name" , "address" , "wardName" , "identify" , "level" , "experience" , "status"  
-                            from "Teachers" t , "Wards" w 
-                            where t."idWard" = w.id and t."phoneNumber" = '${phoneNumber}' `
+            let query = `   select "phoneNumber" , "name" , "address" , w."wardName" , d."districtName", "identify" , "level" , "experience" , "status"  
+                            from "Teachers" t , "Wards" w , "Districts" d
+                            where 
+                            w."idDistrict" = d.id and
+                            t."idWard" = w.id and 
+                            t."phoneNumber" = '${phoneNumber}' `
             const data =  await db.sequelize.query(
                 query
                 ,{ type: QueryTypes.SELECT }
             )
-            resolve(data[0])// alternative by data objects
+            resolve(data[0])
         } catch(e) {
             reject(e)
         }

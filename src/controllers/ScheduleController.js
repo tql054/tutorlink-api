@@ -23,6 +23,29 @@ const getDayOfWeekSchedule = async (req, res) => {
     }
 }
 
+const getUnactiveDayOfWeekSchedule = async (req, res) => {
+    try {
+        let role = req.data.role
+        let data = await TeachingDateServices.getByDayOfWeekUnactive(req.params.teacherPhone, req.params.dow)
+        if(role) {
+            return res.status(200).json({
+                role,
+                data
+            })
+        } else {
+            return res.status(400).json({
+                errCode: 3,
+                message: `User is not allowed`
+            })
+        }
+    } catch (e) {
+        return res.status(500).json({
+            errCode: 4,
+            message: `Error from server: ${e}`
+        })
+    }
+}
+
 const addTeachingDate = async (req, res) => {
     try {
         let teachingDate = req.body
@@ -63,10 +86,54 @@ const validateTeachingTime = async (req, res) => {
     }
 }
 
+const registerTeachingDate = async (req, res) => {
+    try {
+        let teachingDate = req.body
+        let response =  await TeachingDateServices.registerTeachingDate(
+                                req.data.phoneNumber,
+                                req.params.idClass,
+                                req.params.idSubject,
+                                teachingDate
+                            )
+        return res.status(200).json("Register successfully")
+    } catch(e) {
+        return res.status(500).json({
+            error: `Error from server: ${e}`
+        })
+    }
+}
+
+const unregisterTeachingDate = async (req, res) => {
+    try {
+        let teachingDate = req.body
+        let response =  await TeachingDateServices.unregisterTeachingDate(teachingDate)
+        return res.status(200).json("Unactivate successfully")
+    } catch(e) {
+        return res.status(500).json({
+            error: `Error from server: ${e}`
+        })
+    }
+}
+
+const activateTeachingDate = async (req, res) => {
+    try {
+        let teachingDate = req.body
+        let response =  await TeachingDateServices.activateTeachingDate(teachingDate)
+        return res.status(200).json("Activate teaching date successfully")
+    } catch(e) {
+        return res.status(500).json({
+            error: `Error from server: ${e}`
+        })
+    }
+}
 
 module.exports = {
     getDayOfWeekSchedule,
+    getUnactiveDayOfWeekSchedule,
     addTeachingDate,
     removeTeachingDate,
-    validateTeachingTime  
+    validateTeachingTime,
+    registerTeachingDate,
+    unregisterTeachingDate,
+    activateTeachingDate
 }
