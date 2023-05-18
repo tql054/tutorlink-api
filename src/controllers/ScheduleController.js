@@ -49,7 +49,6 @@ const getUnactiveDayOfWeekSchedule = async (req, res) => {
 const addTeachingDate = async (req, res) => {
     try {
         let teachingDate = req.body
-        console.log("data phone number:", req.data.phoneNumber)
         let response = await TeachingDateServices.insertTeachingDate(req.data.phoneNumber, teachingDate)
         return res.status(200).json("response")
     } catch(e) {

@@ -15,7 +15,6 @@ let getAllUser = () => {
             reject(error)
         }
     });
-
     return promise
 }
 
@@ -32,7 +31,6 @@ let handleLogin = (phoneNumber, password) => {
                     },
                     raw: true
                 })
-                // let check = await bcrypt.compareSync(password, user.password)
 
                 if(user.password === password) {
                     var token = jwt.sign({
@@ -42,20 +40,25 @@ let handleLogin = (phoneNumber, password) => {
                         errCode: 0,
                         message: 'OK',
                         token: token,
-                        role: user.role
+                        role: user.role,
+                        status: ''
                     })
                 } else {
                     resolve({
                         errCode: 2,
                         message: "Mật khẩu chưa chính xác!",
-                        token: ''
+                        token: '',
+                        role: '',
+                        status: ''
                     })
                 }
             } else {
                 resolve({
                     errCode: 1,
                     message: "Số điện thoại chưa đăng ký",
-                    token: ''
+                    token: '',
+                    role: '',
+                    status: ''
                 })
             }
             resolve()

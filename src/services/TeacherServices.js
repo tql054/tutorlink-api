@@ -10,10 +10,12 @@ const getTeacherByPhone = (teacherPhone="") => {
                         where 	t."phoneNumber" = '${teacherPhone}' and 
                                 t."idWard" = w.id and 
                                 w."idDistrict" = d.id `
+                                
             const data =  await db.sequelize.query(
                 query
                 ,{ type: QueryTypes.SELECT }
             )
+            
             resolve(data) // alternative by data objects
         } catch(e) {
             reject(e)
@@ -35,6 +37,46 @@ const getAllTeacher = () => {
                 ,{ type: QueryTypes.SELECT }
             )
             resolve(data) // alternative by data objects
+        } catch(e) {
+            reject(e)
+        }
+    })
+    return promise
+}
+
+const insertTeacher = (idWard, {phoneNumber, name="", address="", identify="", level="", experience ="" ,status="waiting"}) => {
+    const promise = new Promise(async function(resolve, reject) {
+        try {
+            const query = `
+                    Insert into "Teachers" ("phoneNumber", "name", "address", "idWard", "identify", 
+                                            "level", "experience", "status", "createdAt", "updatedAt")
+                    values		('${phoneNumber}', '${name}', '${address}', ${idWard}, '${identify}', '${level}',
+                                '${experience}', '${status}', '2023-03-27', '2023-03-27')`
+            let data = await db.sequelize.query(
+                query
+                , {type: QueryTypes.INSERT}
+            )
+            resolve("Update info successfully")
+        } catch(e) {
+            reject(e)
+        }
+    })
+    return promise
+}
+
+const updateTeacher = (idWard, phoneNumber, { name, address, identify, level, experience, status}) => {
+    const promise = new Promise(async function(resolve, reject) {
+        try {
+            const query = `
+                    update	"Teachers"  
+                    set 	"name" = '${name}', "address" = '${address}', "idWard" = ${idWard},
+                            "identify" = '${identify}', "level"= '${level}', "experience"= '${experience}', "status"='${status}'
+                    where  	"phoneNumber" = '${phoneNumber}'`
+            let data = await db.sequelize.query(
+                query
+                , {type: QueryTypes.UPDATE}
+            )
+            resolve("Update info successfully")
         } catch(e) {
             reject(e)
         }
@@ -78,9 +120,10 @@ const getMostRatingTeachers = () => {
     return promise
 }
 
-
 module.exports = {
     getTeacherByPhone,
     getAllTeacher,
-    getMostRatingTeachers
+    getMostRatingTeachers,
+    insertTeacher,
+    updateTeacher
 }

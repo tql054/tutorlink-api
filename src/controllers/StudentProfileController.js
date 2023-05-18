@@ -12,6 +12,33 @@ const getStudentInfoByPhone = async (req, res) => {
     }
 }
 
+const insertNewStudent = async (req, res) => {
+    try {
+        
+        let response = await StudentServices.insertStudent(req.params.idWard, req.params.idClass, req.body.student)
+        return res.status(200).json(response)
+    } catch (e) {
+        return res.status(500).json({
+            errCode: 4,
+            message: `Error from server: ${e}`
+        })
+    }
+}
+
+const updateStudent = async (req, res) => {
+    try {
+        let response = await StudentServices.updateStudent(req.params.idWard, req.params.idClass, req.data.phoneNumber, req.body)
+        return res.status(200).json(response)
+    } catch (e) {
+        return res.status(500).json({
+            errCode: 4,
+            message: `Error from server: ${e}`
+        })
+    }
+}
+
 module.exports = {
-    getStudentInfoByPhone
+    getStudentInfoByPhone,
+    insertNewStudent,
+    updateStudent
 }

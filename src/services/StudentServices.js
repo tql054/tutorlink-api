@@ -24,6 +24,54 @@ const  getStudentInfo = (studentPhone='') => {
     return promise
 }
 
+const insertStudent = (idWard, idClass, {phoneNumber, name="", address="", schoolName="", studentCard="", 
+                        ability="", transcript="", status="waiting"}) => {
+    const promise = new Promise(async function(resolve, reject) {
+        try {
+            const query = `
+                    insert into "Students" ("phoneNumber", "name", "address", "idWard", "idClass", "schoolName", 
+                            "studentCard", "ability", "transcript", "status", "createdAt", "updatedAt")
+                    values	('${phoneNumber}', '${name}', '${address}', ${idWard}, ${idClass}, '${schoolName}', '${studentCard}',
+                            '${ability}', '${transcript}', '${status}', '2023-03-27', '2023-03-27')
+                    `
+            const data =  await db.sequelize.query(
+                query
+                ,{ type: QueryTypes.INSERT }
+            )
+
+            resolve("Update student info successfully") // alternative by data objects
+        } catch(e) {
+            reject(e)
+        }
+    })
+    return promise
+}
+
+const updateStudent = (idWard, idClass, phoneNumber, {name, address, schoolName, studentCard, ability, transcript, status}) => {
+    const promise = new Promise(async function(resolve, reject) {
+        try {
+            const query = `
+                    update	"Students"  
+                    set 	"name" = '${name}', "address" = '${address}', "idWard" = ${idWard}, "idClass" = ${idClass},
+                            "schoolName" = '${schoolName}', "studentCard"= '${studentCard}', "ability" = '${ability}', 
+                            "transcript"='${transcript}', "status"='${status}'
+                    where  	"phoneNumber"  = '${phoneNumber}'
+                    `
+            const data =  await db.sequelize.query(
+                query
+                ,{ type: QueryTypes.UPDATE }
+            )
+
+            resolve("Update student info successfully") // alternative by data objects
+        } catch(e) {
+            reject(e)
+        }
+    })
+    return promise
+}
+
 module.exports = {
-    getStudentInfo
+    getStudentInfo,
+    insertStudent,
+    updateStudent
 }

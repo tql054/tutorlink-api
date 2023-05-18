@@ -1,5 +1,6 @@
 import express from "express";
 import LoginControllers from "../controllers/LoginControllers"
+import SignInController from "../controllers/SignInController" 
 import HomeController from '../controllers/HomeController'
 import {    getDayOfWeekSchedule, 
             getUnactiveDayOfWeekSchedule, 
@@ -21,9 +22,11 @@ let initWebRoutes = (app) => {
     //authentications
     router.post('/login', LoginControllers.handleUserLogin)
     router.post('/check-user/:phone', LoginControllers.checkUserPhone)
+    router.get('/check-user/register/:phone', LoginControllers.checkRegisterUserPhone)
     router.post('/check-user',LoginControllers.checkUserPhone)
     router.get('/all-user', LoginControllers.displayAllUser)
     router.get('/role/:token', AuthorMidleware.checkUser, HomeController.getUserRole)
+    router.post('/add-account', AuthorMidleware.checkDoublePhoneNumber, SignInController.handleUserSignin)
 
     //home
     router.get('/home/:token', AuthorMidleware.checkUser, HomeController.getHomeData)
@@ -47,12 +50,20 @@ let initWebRoutes = (app) => {
                 AuthorMidleware.checkUser, 
                 TeacherProfileController.getTeacherSubjectsByClass
                 )
+    router.post('/teacher-info/:idWard', TeacherProfileController.insertNewTeacher)
+    router.put('/teacher-info/:idWard/:token', AuthorMidleware.checkUser, TeacherProfileController.updateTeacher)
 
     //student info
     router.get('/student-info/:studentPhone/:token', AuthorMidleware.checkUser, StudentProfileController.getStudentInfoByPhone)
-    return app.use('/', router)
+    router.post('/student-info/:idWard/:idClass', StudentProfileController.insertNewStudent)
+    router.put('/student-info/:idWard/:idClass/:token', AuthorMidleware.checkUser, StudentProfileController.updateStudent)
 
     // register
+    router.get('/list-district', SignInController.getAllDistrict)
+    router.get('/list-ward/:idDistrict', SignInController.getWardByDistrict)
+    router.get('/list-class/', SignInController.getAllClasses)
+    return app.use('/', router)
+
 }
 
 module.exports = initWebRoutes

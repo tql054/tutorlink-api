@@ -1,4 +1,5 @@
 import UserServices from '../services/UserServices'
+import AccountServices from '../services/AccountServices'
 var jwt = require('jsonwebtoken')
 let checkUser = async (req, res, next) => {
     try {
@@ -22,7 +23,24 @@ let checkUser = async (req, res, next) => {
     }
 }
 
+let checkDoublePhoneNumber = async (req, res, next) => {
+    try {
+        let phoneNumber = req.body.phoneNumber
+        let user = await AccountServices.checkDoublePhoneNumber(phoneNumber)
+        if(user) {
+            return res.status(400).json(`Số điện thoại này đã được đăng ký`)
+        } else {
+            next()
+        }
+    } catch (e) {
+        return res.status(500).json({
+            error: `Error from server: ${e}`
+        })
+    }
+}
+
 
 module.exports = {
-    checkUser
+    checkUser,
+    checkDoublePhoneNumber
 }

@@ -1,7 +1,7 @@
 import db from "../models";
 const { QueryTypes } = require('sequelize');
 
-const getAllClasses = (teacherPHone="") => {
+const getAllClassesByTeacherPhone = (teacherPHone="") => {
     const promise = new Promise(async function(resolve, reject) {
         try {
             let query = `   select distinct  "idClass" ,c."className" 
@@ -41,6 +41,7 @@ const getAllSubjectsByClass = (teacherPhone="", idClass=13) => {
 }
 
 module.exports = {
-    getAllClasses,
-    getAllSubjectsByClass
+    getAllClassesByTeacherPhone,
+    getAllSubjectsByClass,
+    getAllClassesByTeacherPhone
 }
