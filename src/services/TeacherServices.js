@@ -44,6 +44,127 @@ const getAllTeacher = () => {
     return promise
 }
 
+const getAllActiveTeacher = () => {
+    const promise = new Promise(async function(resolve, reject) {
+        try {
+            // get latest post
+            let query = `   select "phoneNumber" , "name" , "address" , "wardName" , d."districtName" , "identify" , "level" , "experience" , "status"  
+                            from "Teachers" t , "Wards" w , "Districts" d 
+                            where t."idWard" = w.id and 
+                                    w."idDistrict" = d.id and
+                                    t."status" = 'Activated'  `
+            const data =  await db.sequelize.query(
+                query
+                ,{ type: QueryTypes.SELECT }
+            )
+            resolve(data) // alternative by data objects
+        } catch(e) {
+            reject(e)
+        }
+    })
+    return promise
+}
+
+const getAllNotApprovedTeacher = () => {
+    const promise = new Promise(async function(resolve, reject) {
+        try {
+            // get latest post
+            let query = `   select "phoneNumber" , "name" , "address" , "wardName" , d."districtName" , "identify" , "level" , "experience" , "status"  
+                            from "Teachers" t , "Wards" w , "Districts" d 
+                            where t."idWard" = w.id and 
+                                    w."idDistrict" = d.id and
+                                    t."status" = 'Not approved'  `
+            const data =  await db.sequelize.query(
+                query
+                ,{ type: QueryTypes.SELECT }
+            )
+            resolve(data) // alternative by data objects
+        } catch(e) {
+            reject(e)
+        }
+    })
+    return promise
+}
+
+const getAllWaitingTeacher = () => {
+    const promise = new Promise(async function(resolve, reject) {
+        try {
+            // get latest post
+            let query = `   select "phoneNumber" , "name" , "address" , "wardName" , d."districtName" , "identify" , "level" , "experience" , "status"  
+                            from "Teachers" t , "Wards" w , "Districts" d 
+                            where t."idWard" = w.id and 
+                                    w."idDistrict" = d.id and
+                                    t."status" = 'waiting'  `
+            const data =  await db.sequelize.query(
+                query
+                ,{ type: QueryTypes.SELECT }
+            )
+            resolve(data) // alternative by data objects
+        } catch(e) {
+            reject(e)
+        }
+    })
+    return promise
+}
+
+const deleteTeacherNotUpdated = (teacherPhone) => {
+    const promise = new Promise(async function(resolve, reject) {
+        try {
+            const query = `
+                    delete from "Teachers" where "phoneNumber"= '${teacherPhone}'
+            `
+            let data = await db.sequelize.query(
+                query
+                , {type: QueryTypes.DELETE}
+            )
+            resolve("Delete user successfully")
+        } catch(e) {
+            reject(e)
+        }
+    })
+    return promise
+}
+
+const approveTeacher = (teacherPhone) => {
+    const promise = new Promise(async function(resolve, reject) {
+        try {
+            const query = `
+                    update	"Teachers"  
+                    set 	"status" ='Activated'
+                    where  	"phoneNumber" = '${teacherPhone}'
+                    `
+            let data = await db.sequelize.query(
+                query
+                , {type: QueryTypes.UPDATE}
+            )
+            resolve("Activate user successfully")
+        } catch(e) {
+            reject(e)
+        }
+    })
+    return promise
+}
+
+const refuseTeacher = (teacherPhone) => {
+    const promise = new Promise(async function(resolve, reject) {
+        try {
+            const query = `
+                    update	"Teachers"  
+                    set 	"status" ='waiting'
+                    where  	"phoneNumber" = '${teacherPhone}'
+                    `
+            let data = await db.sequelize.query(
+                query
+                , {type: QueryTypes.UPDATE}
+            )
+            resolve("Activate user successfully")
+        } catch(e) {
+            reject(e)
+        }
+    })
+    return promise
+}
+
 const insertTeacher = (idWard, {phoneNumber, name="", address="", identify="", level="", experience ="" ,status="waiting"}) => {
     const promise = new Promise(async function(resolve, reject) {
         try {
@@ -123,6 +244,12 @@ const getMostRatingTeachers = () => {
 module.exports = {
     getTeacherByPhone,
     getAllTeacher,
+    getAllActiveTeacher,
+    getAllNotApprovedTeacher,
+    getAllWaitingTeacher,
+    deleteTeacherNotUpdated,
+    approveTeacher,
+    refuseTeacher,
     getMostRatingTeachers,
     insertTeacher,
     updateTeacher

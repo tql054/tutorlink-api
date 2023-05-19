@@ -95,10 +95,62 @@ const displayAllUser = async function(req, res) {
     }
 }
 
+const showAdminLoginPage = async function(req, res) {
+    try {
+        res.render('Login', {})
+    } catch (e) {
+        return res.status(500).json({
+            errCode: 4,
+            message: `Error from server: ${e}`
+        })
+    }
+}
+
+const handleAdminLogin = async function(req, res) {
+    try {
+        let userPhone = req.body.phone
+        let userPassword = req.body.password
+        console.log(userPhone)
+        console.log(userPassword)
+        if(userPhone && userPassword) {
+            let userData = await LoginServices.handleLogin(userPhone, userPassword)
+            if(userData.message === 'OK' && userData.role != 'AD') {
+                userData = {
+                    errCode: 2,
+                    message: "Tài khoản không có quyền truy cập trang quản trị",
+                    token: '',
+                    role: '',
+                    status: ''
+                }
+            } 
+            return res.status(200).json(
+                userData
+            )
+        }
+        return res.status(200).json({
+            errCode: 5,
+            message: "Thiếu dữ liệu đăng nhập",
+            token: ''
+        })
+        // let userData = await LoginServices.handleLogin(userPhone, userPassword)
+        // if(userData) res.redirect('/')
+        // return res.status(500).json({
+        //     errCode: 4,
+        //     message: `Error from server: ${e}`
+        // })
+    } catch (e) {
+        return res.status(500).json({
+            errCode: 4,
+            message: `Error from server: ${e}`
+        })
+    }
+}
+
 module.exports = {
     handleUserLogin,
+    handleAdminLogin,
     checkRegisterUserPhone,
     checkUserPhone,
-    displayAllUser
-
+    displayAllUser,
+    showAdminLoginPage,
 }

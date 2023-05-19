@@ -23,6 +23,26 @@ let checkUser = async (req, res, next) => {
     }
 }
 
+let checkAdmin = async (req, res, next) => {
+    try {
+        let token = req.cookies.token
+        console.log(token)
+        if(token) {
+            let phone = jwt.verify(token, 'phoneNumber')
+            if(phone) {
+                next()
+            } else {
+                res.redirect('/login')
+            }
+        } else res.redirect('/login')
+    } catch (e) {
+        return res.status(500).json({
+            errCode: 4,
+            message: `Error from server: ${e}`,
+        })
+    }
+}
+
 let checkDoublePhoneNumber = async (req, res, next) => {
     try {
         let phoneNumber = req.body.phoneNumber
@@ -42,5 +62,6 @@ let checkDoublePhoneNumber = async (req, res, next) => {
 
 module.exports = {
     checkUser,
+    checkAdmin,
     checkDoublePhoneNumber
 }

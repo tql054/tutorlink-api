@@ -62,6 +62,23 @@ let initWebRoutes = (app) => {
     router.get('/list-district', SignInController.getAllDistrict)
     router.get('/list-ward/:idDistrict', SignInController.getWardByDistrict)
     router.get('/list-class/', SignInController.getAllClasses)
+
+    // Admin side
+    router.get('/login', LoginControllers.showAdminLoginPage)
+    router.post('/login-admin', LoginControllers.handleAdminLogin)
+    router.get('/', AuthorMidleware.checkAdmin, HomeController.getAdminManageAllTeacher)
+    router.get('/teacher/not-approved', AuthorMidleware.checkAdmin, HomeController.getAdminManageNotApproveTeacher)
+    router.get('/teacher/waiting', AuthorMidleware.checkAdmin, HomeController.getAdminManageWaitingTeacher)
+    router.get('/teacher/approve/:phoneNumber', AuthorMidleware.checkAdmin, HomeController.approveTeacher)
+    router.get('/teacher/refuse/:phoneNumber', AuthorMidleware.checkAdmin, HomeController.refuseTeacher)
+    router.get('/teacher/waiting/delete/:phoneNumber', AuthorMidleware.checkAdmin, HomeController.deleteTeacherNotUpdated)
+    router.get('/student', AuthorMidleware.checkAdmin, HomeController.getAdminManageStudent)
+    router.get('/student/not-approved', AuthorMidleware.checkAdmin, HomeController.getAdminManageNotApproveStudent)
+    router.get('/student/waiting', AuthorMidleware.checkAdmin, HomeController.getAdminManageWaitingStudent)
+    router.get('/student/approve/:phoneNumber', AuthorMidleware.checkAdmin, HomeController.approveStudent)
+    router.get('/student/refuse/:phoneNumber', AuthorMidleware.checkAdmin, HomeController.refuseStudent)
+    router.get('/student/waiting/delete/:phoneNumber', AuthorMidleware.checkAdmin, HomeController.deleteStudentNotUpdated)
+
     return app.use('/', router)
 
 }

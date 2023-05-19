@@ -1,0 +1,183 @@
+<!--A Design by W3layouts
+Author: W3layout
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+
+<%- include('./patials/header') %>
+<body>
+    <section id="container">
+        <header class="header fixed-top clearfix">
+            <!--logo start-->
+            <div class="brand">
+                <a href="index.html" class="logo" style="font-size: 1.2rem;">
+                    Welcome to admin
+                </a>
+                <div class="sidebar-toggle-box">
+                    <div class="fa fa-bars"></div>
+                </div>
+            </div>
+            <!--logo end-->
+            <div class="nav notify-row" id="top_menu">
+                <!--  notification start -->
+            
+                <!--  notification end -->
+            </div>
+            <div class="top-nav clearfix">
+                <!--search & user info start-->
+                <ul class="nav pull-right top-menu">
+                    <li>
+                        <input type="text" class="form-control search" placeholder=" Search">
+                    </li>
+                    <!-- user login dropdown start-->
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <!-- <img alt="" src="images/2.png"> -->
+                            <span class="username">Lê Tuấn</span>
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu extended logout">
+                            <li><a href=""><i class=" fa fa-suitcase"></i>Trang người dùng</a></li>
+                            <li><a href=""><i class="fa fa-key"></i> Đăng xuất</a></li>
+                        </ul>
+                    </li>
+                    <!-- user login dropdown end -->
+                
+                </ul>
+                <!--search & user info end-->
+            </div>
+        </header>
+
+        <aside>
+            <div id="sidebar" class="nav-collapse">
+                <!-- sidebar menu start-->
+                <div class="leftside-navigation">
+                    <ul class="sidebar-menu" id="nav-accordion">
+                        <li>
+                            <a class="active" href="#">
+                                <i class="fa fa-dashboard"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+
+                        <li class="sub-menu">
+                            <a class="menu-title" href="javascript:;">
+                                <i class="fa fa-book"></i>
+                                <span>Quản lý gia sư</span>
+                            </a>
+                            <ul class="sub"> 
+                                <li><a href="/">Gia sư đang hoạt động</a></li> 
+                            </ul>
+                            
+                            <ul class="sub"> 
+                                <li><a href="/teacher/not-approved">Gia sư chờ duyệt</a></li> 
+                            </ul>
+                            
+                            <ul class="sub"> 
+                                <li><a href="/teacher/waiting">Gia sư chờ cập nhật thông tin</a></li> 
+                            </ul>
+                        </li>
+                        
+                        <li class="sub-menu">
+                            <a class="menu-title" href="javascript:;">
+                                <i class="fa fa-book"></i>
+                                <span>Quản lý học viên</span>
+                            </a>
+                            <ul class="sub"> 
+                                <li><a href="/student">Học viên đang hoạt động</a></li> 
+                            </ul>
+                            
+                            <ul class="sub"> 
+                                <li><a href="/student/not-approved">Học viên chờ duyệt</a></li> 
+                            </ul>
+                            
+                            <ul class="sub"> 
+                                <li><a href="/student/waiting">Học viên chờ cập nhật thông tin</a></li> 
+                            </ul>
+                        </li>
+                    </ul>            
+                </div>
+                <!-- sidebar menu end-->
+            </div>
+        </aside>
+        <!--sidebar end-->
+        <!--main content start-->
+        <section id="main-content">
+            <section class="wrapper">
+                <div class="panel panel-primary">
+                    <div class="panel-heading"
+                        style="font-size: 2rem; margin-bottom: 20px;">
+                        <%if(status === 'not approve') {%>
+                            Danh sách tất cả học viên đang chờ duyệt trên hệ thống
+                        <%}%>
+
+                        <%if(status === 'waiting'){%>
+                            Danh sách tất cả học viên chưa cập nhật thông tin trên hệ thống
+                        <%}%>
+
+                        <%if(status === 'activated'){%>
+                            Danh sách tất cả học viên đang hoạt động trên hệ thống
+                        <%}%>
+                    </div> 
+                    
+                    <div class="table-responsive"> 
+                    <table class="table table-striped b-t b-light" id="myTable"> 
+                        <thead> 
+                        <tr> 
+                            <th>Họ tên</th> 
+                            <th>Số điện thoại</th> 
+                            <th>Số nhà</th> 
+                            <th>Địa chỉ</th> 
+                            <th>Lớp</th> 
+                            <th>Trường</th> 
+                            <th>Học lực</th> 
+                            <th>Trạng thái</th> 
+                            <th>Thao tác</th> 
+                        </tr> 
+                        </thead> 
+
+                        <tbody> 
+                            <%
+                                data.forEach(student => {
+                                %>
+                                <tr> 
+                                    <td><h4><%=student.name%></h4></td> 
+                                    <td><%=student.phoneNumber%></td> 
+                                    <td><%=student.address%></td> 
+                                    <td><%=student.wardName%>, <%=student.districtName%></td> 
+                                    <td><%=student.className%></td> 
+                                    <td><%=student.schoolName%></td> 
+                                    <td><%=student.ability%></td> 
+                                    <td><%=student.status%></td> 
+                                    <td class="d-flex">
+                                        <%if(student.status === 'Not approved') {%>
+                                            <button class="btn btn-success">
+                                                <a href="/student/approve/<%=student.phoneNumber%>">Duyệt</a>
+                                            </button>
+
+                                            <button class="btn btn-warning">
+                                                <a href="/student/refuse/<%=student.phoneNumber%>">Từ chối</a>
+                                            </button>
+                                        <%}%>
+
+                                        <%if(student.status === 'waiting'){%>
+                                            <button class="btn btn-danger">
+                                                <a href="/student/waiting/delete/<%=student.phoneNumber%>">Xóa</a>
+                                            </button>
+                                        <%}%>
+                                    </td>
+                                </tr> 
+                                <%
+                            })
+                                %>
+                        </tbody> 
+                    </table> 
+                    </div> 
+                </div> 
+            </section>
+        </section>
+    </section>
+</body>
+
+</html>

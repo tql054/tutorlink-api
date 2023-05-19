@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<head>
+<title>Admin TutorLink</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="Visitors Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!-- bootstrap-css -->
+<link rel="stylesheet" href='/backend/css/bootstrap.min.css' >
+<!-- //bootstrap-css -->
+<!-- Custom CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+<link href='/backend/css/style.css' rel='stylesheet' type='text/css' />
+<link href='/backend/css/style-responsive.css' rel="stylesheet"/>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- font CSS -->
+<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+<!-- font-awesome icons -->
+<link rel="stylesheet" href="/css/font.css" type="text/css"/>
+<link href='/backend/css/font-awesome.css' rel="stylesheet"> 
+</head>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<body>
+	<div class="log-w3">
+		<div class="w3layouts-main">
+			<h2 style="font-size: 3rem;">TutorLink</h2>
+				<div>
+					<input 
+						id="phone-number"
+						type="text" 
+						class="ggg" 
+						name="email" 
+						placeholder="Email" 
+						required=""
+						style="font-size: 1.6rem;">
+					<input 
+						id="password"
+						type="password" 
+						class="ggg" 
+						name="password" 
+						placeholder="Mật khẩu" 
+						required=""
+						style="font-size: 1.6rem;">
+						<div class="clearfix"></div>
+					<input onclick="login()" type="submit" value="Đăng nhập" name="login">
+				</div>
+		</div>
+	</div>
+</body>
+<script>
+	function setCookie(cname, cvalue, exdays) {
+		var d = new Date()
+		d.setTime(d.getTime() + exdays*24*60*60*1000)
+		var expires = "expires=" + d.toUTCString()
+		document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/"
+	}
+
+	function getCookie(cname) {
+		var name = cname + "="
+		var decodedCookie = decodeURIComponent(document.cookie)
+		var ca =  decodedCookie.split(';')
+		for(var i = 0; i < ca.length; i++ ) {
+			return c.substring(name.length, c.length)
+		}
+		return ""
+	}
+	
+	function login() {
+		$.ajax({
+			url: '/login-admin',
+			type: 'POST',
+			data: {
+				phone: $('#phone-number').val(), 
+				password: $('#password').val()
+			}
+		}).then (
+			data=> {
+				if(data.message==='OK') {
+					setCookie('token', data.token,)
+					window.location.href = '/';
+				} else {
+					alert(data.message)
+				}
+			}
+		)
+	}
+</script>
+</html>
+
