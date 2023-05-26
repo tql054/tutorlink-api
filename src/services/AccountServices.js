@@ -1,3 +1,4 @@
+import getCurrentDatetime from ".";
 import db from "../models";
 const { QueryTypes } = require('sequelize');
 
@@ -83,7 +84,7 @@ const insertAccount = (phoneNumber="",password="", role="") => {
     const promise = new Promise(async function(resolve, reject) {
         try {
             const query = `Insert into "Accounts"  
-                          values 	('${phoneNumber}', '${password}', '${role}', '2023-03-27', '2023-03-27')`
+                          values 	('${phoneNumber}', '${password}', '${role}', '${getCurrentDatetime}', '${getCurrentDatetime}')`
             let data = await db.sequelize.query(
                 query
                 , {type: QueryTypes.INSERT}

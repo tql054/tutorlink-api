@@ -3,6 +3,7 @@ import StudentPostServices from '../services/StudentPostServices'
 import TeacherServices from '../services/TeacherServices'
 import StudentServices from '../services/StudentServices'
 import TeachingDateServices from '../services/TeachingDateServices'
+import getCurrentDatetime from '../services'
 
 let getUserRole = async (req, res) => {
     try {
@@ -26,7 +27,7 @@ let getHomeData = async (req, res) => {
             case 'HS': {
                 data.profile = await ProfileServices.getStudentHomeData(req.data.phoneNumber)
                 data.latestTeachers = await TeacherServices.getAllActiveTeacher()
-                data.mostRatingTeachers = await TeacherServices.getAllActiveTeacher()
+                data.mostRatingTeachers = await TeacherServices.getMostRatingTeachers()
                 return res.status(200).json({
                     role,
                     profile: data.profile,

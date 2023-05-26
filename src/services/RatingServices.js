@@ -1,4 +1,5 @@
 import db from "../models";
+import getCurrentDatetime from ".";
 const { QueryTypes } = require('sequelize');
 
 const getAllRatingByTeacherPhone = (teacherPhone="") => {
@@ -32,7 +33,7 @@ const addRating = ({teacherPhone, studentPhone, idSubject, idClass, rating, comm
             const query = `
                             Insert into "Ratings"  
                             ("teacherPhone", "studentPhone", "idSubject", "idClass", "rating", "comments", "createdAt", "updatedAt")
-                            values	('${teacherPhone}', '${studentPhone}', '${idSubject}', '${idClass}', ${rating}, '${comments}','2023-03-27', '2023-03-27')
+                            values	('${teacherPhone}', '${studentPhone}', '${idSubject}', '${idClass}', ${rating}, '${comments}','${getCurrentDatetime}', '${getCurrentDatetime}')
                         `
             await db.sequelize.query(
                 query

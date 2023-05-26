@@ -69,24 +69,23 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	function login() {
 		const date = new Date();
 		const dayOfWeek = date.getDay();
-		alert("abc" + dayOfWeek)
-		// $.ajax({
-		// 	url: '/login-admin',
-		// 	type: 'POST',
-		// 	data: {
-		// 		phone: $('#phone-number').val(), 
-		// 		password: $('#password').val()
-		// 	}
-		// }).then (
-		// 	data=> {
-		// 		if(data.message==='OK') {
-		// 			setCookie('token', data.token,)
-		// 			window.location.href = '/';
-		// 		} else {
-		// 			alert(data.message)
-		// 		}
-		// 	}
-		// )
+		$.ajax({
+			url: '/login-admin',
+			type: 'POST',
+			data: {
+				phone: $('#phone-number').val(), 
+				password: $('#password').val()
+			}
+		}).then (
+			data=> {
+				if(data.message==='OK') {
+					setCookie('token', data.token,)
+					window.location.href = '/';
+				} else {
+					alert(data.message)
+				}
+			}
+		)
 	}
 </script>
 </html>

@@ -132,12 +132,6 @@ const handleAdminLogin = async function(req, res) {
             message: "Thiếu dữ liệu đăng nhập",
             token: ''
         })
-        // let userData = await LoginServices.handleLogin(userPhone, userPassword)
-        // if(userData) res.redirect('/')
-        // return res.status(500).json({
-        //     errCode: 4,
-        //     message: `Error from server: ${e}`
-        // })
     } catch (e) {
         return res.status(500).json({
             errCode: 4,

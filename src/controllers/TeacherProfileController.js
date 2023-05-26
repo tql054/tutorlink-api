@@ -14,11 +14,15 @@ const getAventuredTeachers = async (req, res) => {
         let isNextPage =  data.length === currentPage*10
         
         let listTeacher = data.slice((limit - 10 - data.length))
-        // if(name!=null) {
-        // let result = data.filter(function(value, index, array) {
-        //         return value.name.trim().toLowerCase().includes('l')
-        //       })
-        // }
+        if(name!="null") {
+            console.log("name input: ", name)
+            let newData = listTeacher.filter(function(value, index, array) {
+                    console.log("name output: ", value.name)
+                    return value.name.trim().toLowerCase().includes(name.trim().toLowerCase())
+                })
+                console.log("new data: ", newData)
+            listTeacher = newData
+        }
         return res.status(200).json({
             isNextPage,
             listTeacher

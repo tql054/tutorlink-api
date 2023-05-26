@@ -39,7 +39,6 @@ const getAvarageRatingByTeacherPhone = async (req, res) => {
     }
 }
 
-
 const getRatingPageData = async (req, res) => {
     try {
         let teacherPhone = req.params.teacherPhone

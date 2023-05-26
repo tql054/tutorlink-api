@@ -103,6 +103,7 @@ let initWebRoutes = (app) => {
     // Rating side
     router.get('/rating/:teacherPhone/:token', AuthorMidleware.checkUser, RatingController.getAllRatingByTeacherPhone)
     router.get('/rating/page/:teacherPhone/:token', AuthorMidleware.checkUser, RatingController.getRatingPageData)
+    router.get('/rating/avg/:teacherPhone/:token', AuthorMidleware.checkUser, RatingController.getAvarageRatingByTeacherPhone)
     router.post('/rating/:dow/:timeBegin/:token', AuthorMidleware.checkUser, RatingController.addRating)
 
     return app.use('/', router)

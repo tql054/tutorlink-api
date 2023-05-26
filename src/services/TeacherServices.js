@@ -1,4 +1,5 @@
 import db from "../models";
+import getCurrentDatetime from ".";
 const { QueryTypes } = require('sequelize');
 
 const getTeacherByPhone = (teacherPhone="") => {
@@ -193,7 +194,7 @@ const insertTeacher = (idWard, {phoneNumber, name="", address="", identify="", l
                     Insert into "Teachers" ("phoneNumber", "name", "address", "idWard", "identify", 
                                             "level", "experience", "status", "createdAt", "updatedAt")
                     values		('${phoneNumber}', '${name}', '${address}', ${idWard}, '${identify}', '${level}',
-                                '${experience}', '${status}', '2023-03-27', '2023-03-27')`
+                                '${experience}', '${status}', '${getCurrentDatetime}', '${getCurrentDatetime}')`
             let data = await db.sequelize.query(
                 query
                 , {type: QueryTypes.INSERT}
@@ -212,7 +213,8 @@ const updateTeacher = (idWard, phoneNumber, { name, address, identify, level, ex
             const query = `
                     update	"Teachers"  
                     set 	"name" = '${name}', "address" = '${address}', "idWard" = ${idWard},
-                            "identify" = '${identify}', "level"= '${level}', "experience"= '${experience}', "status"='${status}'
+                            "identify" = '${identify}', "level"= '${level}', "experience"= '${experience}',
+                             "status"='${status}, "updatedAt"='${getCurrentDatetime}'
                     where  	"phoneNumber" = '${phoneNumber}'`
             let data = await db.sequelize.query(
                 query
@@ -230,10 +232,12 @@ const getMostRatingTeachers = () => {
     const promise = new Promise(async function(resolve, reject) {
         try {
             // get latest post
-            let querySelectTeachers = `  select "phoneNumber" , "name" , "address" , "wardName" , d."districtName" , "identify" , "level" , "experience" , "status"  
-            from "Teachers" t , "Wards" w , "Districts" d 
+            let querySelectTeachers = `  select distinct "phoneNumber" , "name" , "address" , "wardName" , d."districtName" , "identify" , "level" , "experience" , "status"  
+            from "Teachers" t , "Wards" w , "Districts" d , "Ratings" r
             where t."idWard" = w.id and 
-                    w."idDistrict" = d.id `
+                    w."idDistrict" = d.id and
+                    t."phoneNumber" = r."teacherPhone" and
+                    r."rating" > 4`
 
             const data =  await db.sequelize.query(
                 querySelectTeachers
@@ -258,7 +262,7 @@ const getAventuredTeachers = (district="", subject="", classObject="", limit = 5
                                     t."phoneNumber" = sot."teacherPhone" 
                                     
                                     ${district} ${subject} ${classObject} 
-                            limit ${limit}`
+                            limit ${limit} `
                             // t.status = 'Activated'
             const data =  await db.sequelize.query(
                 query
