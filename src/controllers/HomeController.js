@@ -2,6 +2,7 @@ import ProfileServices from '../services/ProfileServices'
 import StudentPostServices from '../services/StudentPostServices'
 import TeacherServices from '../services/TeacherServices'
 import StudentServices from '../services/StudentServices'
+import TeachingDateServices from '../services/TeachingDateServices'
 
 let getUserRole = async (req, res) => {
     try {
@@ -24,8 +25,8 @@ let getHomeData = async (req, res) => {
         switch(role) {
             case 'HS': {
                 data.profile = await ProfileServices.getStudentHomeData(req.data.phoneNumber)
-                data.latestTeachers = await TeacherServices.getAllTeacher()
-                data.mostRatingTeachers = await TeacherServices.getMostRatingTeachers()
+                data.latestTeachers = await TeacherServices.getAllActiveTeacher()
+                data.mostRatingTeachers = await TeacherServices.getAllActiveTeacher()
                 return res.status(200).json({
                     role,
                     profile: data.profile,
@@ -35,15 +36,14 @@ let getHomeData = async (req, res) => {
             }
 
             case 'GV': {
+                const date = new Date();
+                const dayOfWeek = date.getDay();
+                
                 data.profile = await ProfileServices.getTeacherHomeData(req.data.phoneNumber)
-                data.latestPost = await StudentPostServices.getLatestPost()
-                data.specialPost = await StudentPostServices.getSpecialPost()
-                data.schedule = ""
+                data.schedule = await TeachingDateServices.getHomeTeachingDate(req.data.phoneNumber, 'Tư')
                 return res.status(200).json({
                     role,
                     profile: data.profile,
-                    latestPost: data.latestPost,
-                    specialPost: data.specialPost,
                     schedule: data.schedule
                 })
             }
@@ -62,6 +62,11 @@ let getHomeData = async (req, res) => {
             message: `Error from server: ${e}`
         })
     }
+}
+
+function getDayName(dayOfWeek) {
+    const days = ['CN', 'Hai', 'Ba', 'Tư', 'Năm', 'Sáu', 'Bảy'];
+    return days[dayOfWeek];
 }
 
 let getAdminManageAllTeacher = async (req, res) => {

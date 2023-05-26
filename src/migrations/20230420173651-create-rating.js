@@ -51,7 +51,7 @@ module.exports = {
         onDelete: 'CASCADE',
       },
       rating: {
-        type: Sequelize.INTEGER
+        type: Sequelize.FLOAT
       },
       comments: {
         type: Sequelize.TEXT

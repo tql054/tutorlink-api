@@ -10,7 +10,8 @@ const  getByDayOfWeek = (teacherPhone='', dayOfWeek='') => {
             WHERE 	"TeachingDate"."teacherPhone" = '${teacherPhone}' AND 
                     "TeachingDate"."dayOfWeek" = '${dayOfWeek}' and 
                     "TeachingDate"."idSubject" = s.id and
-                    "TeachingDate"."idClass"  = c.id`
+                    "TeachingDate"."idClass"  = c.id
+		            order by "timeBegin" asc `
             const data =  await db.sequelize.query(
                 query
                 ,{ type: QueryTypes.SELECT }
@@ -36,7 +37,8 @@ const  getByDayOfWeekUnactive = (teacherPhone='', dayOfWeek='') => {
                     "TeachingDate"."idSubject" = s.id and
                     "TeachingDate"."idClass"  = c.id and
                     "TeachingDate"."studentPhone" is null and
-                    "TeachingDate"."status" = 'unactivated'`
+                    "TeachingDate"."status" = 'unactivated'
+		            order by "timeBegin" asc `
             const data =  await db.sequelize.query(
                 query
                 ,{ type: QueryTypes.SELECT }
@@ -139,9 +141,32 @@ const registerTeachingDate = (studentPhone="", idClass, idSubject, {teacherPhone
     return promise
 }
 
+const shutDownTeachingDate = ({teacherPhone, dayOfWeek, timeBegin}) => {
+    const promise = new Promise(async function(resolve, reject) {
+        try {
+            const query = `
+                update	"TeachingDates" 
+                set     "status" = 'waiting for rating'
+                where  	"teacherPhone" = '${teacherPhone}' and 
+                        "dayOfWeek" = '${dayOfWeek}' and 
+                        "timeBegin" = '${timeBegin}' 
+            `
+            let data = await db.sequelize.query(
+                query,
+                {type: QueryTypes.UPDATE}
+            )
+            resolve(data)
+        } catch(e) {
+            reject(e)
+        }
+    })
+    return promise
+}
+
 const unregisterTeachingDate = ({teacherPhone, dayOfWeek, timeBegin}) => {
     const promise = new Promise(async function(resolve, reject) {
         try {
+            console.log(`${teacherPhone}, ${dayOfWeek}, ${timeBegin}`)
             const query = `
                 update	"TeachingDates" 
                 set 	"idSubject" = 10, "idClass" = 13, "studentPhone" = null, "status" = 'unactivated'
@@ -183,6 +208,67 @@ const activateTeachingDate = ({teacherPhone, dayOfWeek, timeBegin}) => {
     return promise
 }
 
+const getHomeTeachingDate = (teacherPhone='', dayOfWeek='') => {
+    const promise = new Promise(async function(resolve, reject) {
+        try {
+            const query =  `select 	s2."subject" , s2.id as idsubject , c."className" , c.id as idclass, td."timeBegin" , td."dayOfWeek" , td."duration",
+                            "studentPhone" , s."name" as studentName , "teacherPhone" , t."name" as teacherName, t."level", s."address"  , w."wardName" ,
+                            d."districtName" , td."status"
+                            from 	"TeachingDates" td , "Teachers" t , "Students" s , "Classes" c , "Subjects" s2 , "Districts" d , "Wards" w 
+                            where 	td."teacherPhone"  = t."phoneNumber" and
+                                    td."studentPhone"  = s."phoneNumber" and 
+                                    td."idSubject"  = s2.id and 
+                                    td."idClass"  = c.id and 
+                                    s."idWard" = w.id and 
+                                    w."idDistrict" = d.id and 
+                                    td."dayOfWeek" = '${dayOfWeek}'  and 
+                                    td."teacherPhone"  = '${teacherPhone}' and
+                                    td."status" = 'active'
+		                    order by "timeBegin" asc `
+            const data =  await db.sequelize.query(
+                query
+                ,{ type: QueryTypes.SELECT }
+            )
+
+            data
+            resolve(data) // alternative by data objects
+        } catch(e) {
+            reject(e)
+        }
+    })
+    return promise
+}
+
+const getStudentSchedule = (studentPhone='', dayOfWeek='Hai') => {
+    const promise = new Promise(async function(resolve, reject) {
+        try {
+            const query =  `select 	s2."subject" , s2.id as idsubject , c."className" , c.id as idclass, td."timeBegin" , td."dayOfWeek" , td."duration",
+                                    "studentPhone" , s."name" as studentName , "teacherPhone" , t."name" as teacherName, t."level", s."address"  , w."wardName" ,
+                                     d."districtName" , td."status"
+                            from 	"TeachingDates" td , "Teachers" t , "Students" s , "Classes" c , "Subjects" s2 , "Districts" d , "Wards" w 
+                            where 	td."teacherPhone"  = t."phoneNumber" and
+                                    td."studentPhone"  = s."phoneNumber" and 
+                                    td."idSubject"  = s2.id and 
+                                    td."idClass"  = c.id and 
+                                    s."idWard" = w.id and 
+                                    w."idDistrict" = d.id and 
+                                    td."studentPhone" =  '${studentPhone}' and 
+                                    td."dayOfWeek" = '${dayOfWeek}'
+                                    order by "timeBegin" asc `
+            const data =  await db.sequelize.query(
+                query
+                ,{ type: QueryTypes.SELECT }
+            )
+
+            data
+            resolve(data) // alternative by data objects
+        } catch(e) {
+            reject(e)
+        }
+    })
+    return promise
+}
+
 module.exports = {
     getByDayOfWeek,
     getByDayOfWeekUnactive,
@@ -190,6 +276,9 @@ module.exports = {
     deleteTeachingDate,
     getCurrentTeachingTimes,
     registerTeachingDate,
+    shutDownTeachingDate,
     unregisterTeachingDate,
-    activateTeachingDate
+    activateTeachingDate,
+    getHomeTeachingDate,
+    getStudentSchedule
 }

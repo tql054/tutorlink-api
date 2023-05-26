@@ -46,6 +46,25 @@ const getAllActiveStudent = () => {
     return promise
 }
 
+const getStudentStatus = (phoneNumber="") => {
+    const promise = new Promise(async function(resolve, reject) {
+        try {
+            // get latest post
+            let query = `   select "status"
+                            from 	"Students" s  
+                            where 	s."phoneNumber"='${phoneNumber}'`
+            const data =  await db.sequelize.query(
+                query
+                ,{ type: QueryTypes.SELECT }
+            )
+            resolve(data[0].status) // alternative by data objects
+        } catch(e) {
+            reject(e)
+        }
+    })
+    return promise
+}
+
 const getAllNotApprovedStudent = () => {
     const promise = new Promise(async function(resolve, reject) {
         try {
@@ -107,6 +126,7 @@ const deleteStudentNotUpdated = (StudentPhone) => {
     })
     return promise
 }
+
 
 const approveStudent = (studentPhone) => {
     const promise = new Promise(async function(resolve, reject) {
@@ -171,14 +191,14 @@ const insertStudent = (idWard, idClass, {phoneNumber, name="", address="", schoo
     return promise
 }
 
-const updateStudent = (idWard, idClass, phoneNumber, {name, address, schoolName, studentCard, ability, transcript, status}) => {
+const updateStudent = (idWard, idClass, phoneNumber, {name, address, schoolName, studentCard, ability, transcript}) => {
     const promise = new Promise(async function(resolve, reject) {
         try {
             const query = `
                     update	"Students"  
                     set 	"name" = '${name}', "address" = '${address}', "idWard" = ${idWard}, "idClass" = ${idClass},
                             "schoolName" = '${schoolName}', "studentCard"= '${studentCard}', "ability" = '${ability}', 
-                            "transcript"='${transcript}', "status"='${status}'
+                            "transcript"='${transcript}', "status"='Not approved'
                     where  	"phoneNumber"  = '${phoneNumber}'
                     `
             const data =  await db.sequelize.query(
@@ -196,6 +216,7 @@ const updateStudent = (idWard, idClass, phoneNumber, {name, address, schoolName,
 
 module.exports = {
     getStudentInfo,
+    getStudentStatus,
     insertStudent,
     updateStudent,
     getAllActiveStudent,

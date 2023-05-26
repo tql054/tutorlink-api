@@ -1,6 +1,7 @@
 import AccountServices from '../services/AccountServices'
 import TeacherServices from '../services/TeacherServices'
 import StudentServices from '../services/StudentServices'
+import SubjectOfTeacherServices from '../services/SubjectOfTeacherServices'
 
 const handleUserSignin = async (req, res) => {
     try {   
@@ -52,10 +53,51 @@ const getAllClasses = async (req, res) => {
     }
 }
 
+const getAllSubjectsByClass = async (req, res) => {
+    try {   
+        let result = await TeacherServices.getAllSubjectsByClass(req.params.idClass)
+        return res.status(200).json(result)
+    } catch(e) {
+        return res.status(500).json({
+            error: `Error from server: ${e}`
+        })
+    }
+}
+
+const getAllSubjects = async (req, res) => {
+    try {   
+        let result = await TeacherServices.getAllSubjects()
+        return res.status(200).json(result)
+    } catch(e) {
+        return res.status(500).json({
+            error: `Error from server: ${e}`
+        })
+    }
+}
+
+
+const addSubjectTeacher = async (req, res) => {
+    try {   
+        console.log(req.data.phoneNumber)
+        let subjectTeacher = {
+            ...req.body,
+            teacherPhone: req.data.phoneNumber
+        }
+        let result = await SubjectOfTeacherServices.addSubjecTeacher(subjectTeacher)
+        return res.status(200).json(result)
+    } catch(e) {
+        return res.status(500).json({
+            error: `Error from server: ${e}`
+        })
+    }
+}
 
 module.exports = {
     handleUserSignin,
     getAllDistrict,
     getWardByDistrict,
-    getAllClasses
+    getAllClasses,
+    addSubjectTeacher,
+    getAllSubjects,
+    getAllSubjectsByClass
 }

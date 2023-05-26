@@ -43,13 +43,13 @@ const getWardsByDistrict = (idDistrict="") => {
 const getAllClasses = () => {
     const promise = new Promise(async function(resolve, reject) {
         try {
-            // get latest post
-            let data = await db.Class.findAll({
-                attributes: {
-                    exclude: ['createdAt', 'updatedAt']
-                },
-                raw: true
-            })
+            const query = `select id , "className" 
+                            from "Classes" c 
+                            where "className"  is not null`
+            let data = await db.sequelize.query(
+                query
+                , {type: QueryTypes.SELECT}
+            )
             resolve(data) 
         } catch(e) {
             reject(e)

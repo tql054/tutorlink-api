@@ -24,6 +24,27 @@ const getTeacherByPhone = (teacherPhone="") => {
     return promise
 }
 
+const getTeacherStatus = (teacherPhone="") => {
+    const promise = new Promise(async function(resolve, reject) {
+        try {
+            // get latest post
+            let query =`select 	"status" 
+                        from 	"Teachers" t
+                        where 	t."phoneNumber" = '${teacherPhone}'`
+                                
+            const data =  await db.sequelize.query(
+                query
+                ,{ type: QueryTypes.SELECT }
+            )
+            
+            resolve(data[0].status) // alternative by data objects
+        } catch(e) {
+            reject(e)
+        }
+    })
+    return promise 
+}
+
 const getAllTeacher = () => {
     const promise = new Promise(async function(resolve, reject) {
         try {
@@ -218,21 +239,6 @@ const getMostRatingTeachers = () => {
                 querySelectTeachers
                 ,{ type: QueryTypes.SELECT }
             )
-
-            data.map(async (value, index) => {
-                let querySelectSubjectOfTeachers = `
-                            select  s.subject , c."className" 
-                            from 	"SubjectOfTeachers" sot, "Subjects" s , "Classes" c 
-                            where 	"teacherPhone" = '${value.phoneNumber}' and 
-                                    sot."idSubject" = s.id and 
-                                    sot."idClass" = c.id 
-                `
-                const listSOT = await db.sequelize.query(
-                    querySelectSubjectOfTeachers
-                    ,{ type: QueryTypes.SELECT }
-                )
-                value.listSOT = []
-            })
             resolve(data) // alternative by data objects
         } catch(e) {
             reject(e)
@@ -241,9 +247,75 @@ const getMostRatingTeachers = () => {
     return promise
 }
 
-module.exports = {
+const getAventuredTeachers = (district="", subject="", classObject="", limit = 5) => {
+    const promise = new Promise(async function(resolve, reject) {
+        try {
+            // get latest post
+            let query = `   select distinct	"phoneNumber" , "name" , "address" , w."wardName" , d."districtName" , "identify" , "level" , "experience" , "status" 
+                            from 	"Teachers" t, "Wards" w , "Districts" d , "SubjectOfTeachers" sot 
+                            where 	t."idWard" = w.id and 
+                                    w."idDistrict" = d.id and 
+                                    t."phoneNumber" = sot."teacherPhone" 
+                                    
+                                    ${district} ${subject} ${classObject} 
+                            limit ${limit}`
+                            // t.status = 'Activated'
+            const data =  await db.sequelize.query(
+                query
+                ,{ type: QueryTypes.SELECT }
+            )
+            resolve(data) // alternative by data objects
+        } catch(e) {
+            reject(e)
+        }
+    })
+    return promise
+}
+
+const getAllSubjects= () => {
+    const promise = new Promise(async function(resolve, reject) {
+        try {
+            // get latest post
+            let query = `   select 	id, subject 
+                            from 	"Subjects" s 
+                            where   s."subject" is not null`
+            const data =  await db.sequelize.query(
+                query
+                ,{ type: QueryTypes.SELECT }
+            )
+            resolve(data) // alternative by data objects
+        } catch(e) {
+            reject(e)
+        }
+    })
+    return promise
+}
+
+const getAllSubjectsByClass = (idClass) => {
+    const promise = new Promise(async function(resolve, reject) {
+        try {
+            // get latest post
+            let query = `   select 	id, subject 
+                            from 	"Subjects" s 
+                            where 	s."minClass" <= ${idClass} and 
+                                    s."maxClass" >= ${idClass} and
+                                    s."subject" is not null`
+            const data =  await db.sequelize.query(
+                query
+                ,{ type: QueryTypes.SELECT }
+            )
+            resolve(data) // alternative by data objects
+        } catch(e) {
+            reject(e)
+        }
+    })
+    return promise
+}
+
+module.exports = {  
     getTeacherByPhone,
     getAllTeacher,
+    getTeacherStatus,
     getAllActiveTeacher,
     getAllNotApprovedTeacher,
     getAllWaitingTeacher,
@@ -252,5 +324,8 @@ module.exports = {
     refuseTeacher,
     getMostRatingTeachers,
     insertTeacher,
-    updateTeacher
+    updateTeacher,
+    getAventuredTeachers,
+    getAllSubjects,
+    getAllSubjectsByClass
 }

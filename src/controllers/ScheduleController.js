@@ -102,6 +102,18 @@ const registerTeachingDate = async (req, res) => {
     }
 }
 
+const shutDownTeachingDate = async (req, res) => {
+    try {
+        let teachingDate = req.body
+        let response =  await TeachingDateServices.shutDownTeachingDate(teachingDate)
+        return res.status(200).json("Unactivate successfully")
+    } catch(e) {
+        return res.status(500).json({
+            error: `Error from server: ${e}`
+        })
+    }
+}
+
 const unregisterTeachingDate = async (req, res) => {
     try {
         let teachingDate = req.body
@@ -126,6 +138,38 @@ const activateTeachingDate = async (req, res) => {
     }
 }
 
+const getHomeTeachingDate = async (req, res) => {
+    try {
+        let data = await TeachingDateServices.getHomeTeachingDate(req.data.phoneNumber, req.params.dow)
+        return res.status(200).json(
+            data
+        )
+    } catch (e) {
+        return res.status(500).json({
+            errCode: 4,
+            message: `Error from server: ${e}`
+        })
+    }
+}
+
+const getStudentSchedule = async (req, res) => {
+    try {
+        let data = await TeachingDateServices.getStudentSchedule(req.data.phoneNumber, req.params.dow)
+        return res.status(200).json(
+            data
+        )
+    } catch (e) {
+        return res.status(500).json({
+            errCode: 4,
+            message: `Error from server: ${e}`
+        })
+    }
+}
+
+const ratingTeachingDate = async () => {
+
+}
+
 module.exports = {
     getDayOfWeekSchedule,
     getUnactiveDayOfWeekSchedule,
@@ -133,6 +177,10 @@ module.exports = {
     removeTeachingDate,
     validateTeachingTime,
     registerTeachingDate,
+    shutDownTeachingDate,
     unregisterTeachingDate,
-    activateTeachingDate
+    activateTeachingDate,
+    getHomeTeachingDate,
+    getStudentSchedule,
+    ratingTeachingDate
 }

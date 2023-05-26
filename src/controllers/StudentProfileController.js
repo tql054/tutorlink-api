@@ -1,4 +1,29 @@
 import StudentServices from '../services/StudentServices'
+
+const getStudentInfo = async (req, res) => {
+    try {
+        let data = await StudentServices.getStudentInfo(req.data.phoneNumber)
+        return res.status(200).json(data[0])
+    } catch (e) {
+        return res.status(500).json({
+            errCode: 4,
+            message: `Error from server: ${e}`
+        })
+    }
+}
+
+const getStudentStatus = async (req, res) => {
+    try {
+        let data = await StudentServices.getStudentStatus(req.data.phoneNumber)
+        return res.status(200).json(data)
+    } catch (e) {
+        return res.status(500).json({
+            errCode: 4,
+            message: `Error from server: ${e}`
+        })
+    }
+}
+
 const getStudentInfoByPhone = async (req, res) => {
     try {
         let role = req.data.role
@@ -38,6 +63,8 @@ const updateStudent = async (req, res) => {
 }
 
 module.exports = {
+    getStudentInfo,
+    getStudentStatus,
     getStudentInfoByPhone,
     insertNewStudent,
     updateStudent

@@ -1,20 +1,106 @@
 import TeacherServices from '../services/TeacherServices'
-import {getAllClassesByTeacherPhone, getAllSubjectsByClass} from '../services/SubjectOfTeacherServices'
+import RatingServices from '../services/RatingServices'
+import {getAllClassesByTeacherPhone, getAllSubjectsByClass, getAllSubjectTeacher} from '../services/SubjectOfTeacherServices'
+
+const getAventuredTeachers = async (req, res) => {
+    try {
+        let name = req.params.name
+        let currentPage = req.params.currentPage
+        let limit = currentPage * 10
+        let district = req.params.idDistrict!=0?` and w."idDistrict" = ${req.params.idDistrict}`:""
+        let subject = req.params.idSubject!=0?` and sot."idSubject" = ${req.params.idSubject}`:""
+        let classObject = req.params.idClass!=0?` and sot."idClass" = ${req.params.idClass}`:""
+        let data = await TeacherServices.getAventuredTeachers(district, subject, classObject, limit)
+        let isNextPage =  data.length === currentPage*10
+        
+        let listTeacher = data.slice((limit - 10 - data.length))
+        // if(name!=null) {
+        // let result = data.filter(function(value, index, array) {
+        //         return value.name.trim().toLowerCase().includes('l')
+        //       })
+        // }
+        return res.status(200).json({
+            isNextPage,
+            listTeacher
+        })
+
+    } catch (e) {
+        return res.status(500).json({
+            errCode: 4,
+            message: `Error from server: ${e}`
+        })
+    }
+}
+
+const getTeacherProfileData = async (req, res) => {
+    try {
+        let teacherPhone = req.data.phoneNumber
+        let teacherInfoResult = await TeacherServices.getTeacherByPhone(teacherPhone)
+        let teacher = teacherInfoResult[0]
+        let listSubject = await getAllSubjectTeacher(teacherPhone)
+        let listRating = await RatingServices.getAllRatingByTeacherPhone(teacherPhone)
+        let rating = listRating.reduce(function(accumulator, currentValue) {
+            return accumulator + currentValue.rating;
+          }, 0)/(listRating.length - 1)
+
+        return res.status(200).json({
+            teacher,
+            listSubject,
+            rating,
+            listRating
+        })
+    } catch (e) {
+        return res.status(500).json({
+            errCode: 4,
+            message: `Error from server: ${e}`
+        })
+    }
+}
 
 const getTeacherInfo = async (req, res) => {
     try {
         let role = req.data.role
         let data = await TeacherServices.getTeacherByPhone(req.params.teacherPhone)
-        
         return res.status(200).json(data[0])
+    } catch (e) {
+        return res.status(500).json({
+            errCode: 4,
+            message: `Error from server: ${e}`
+        })
+    }
+}
 
-        // if(role) {
-        // } else {
-        //     return res.status(400).json({
-        //         errCode: 3,
-        //         message: `User is not allowed`
-        //     })
-        // }
+const getTeacherStatus = async (req, res) => {
+    try {
+        let role = req.data.role
+        let data = await TeacherServices.getTeacherStatus(req.data.phoneNumber)
+        return res.status(200).json(data)
+    } catch (e) {
+        return res.status(500).json({
+            errCode: 4,
+            message: `Error from server: ${e}`
+        })
+    }
+}
+
+const getAllSubjectOfTeacher = async (req, res) => {
+    try {
+        let data = await getAllSubjectTeacher(req.params.teacherPhone)
+        
+        return res.status(200).json(data)
+    } catch (e) {
+        return res.status(500).json({
+            errCode: 4,
+            message: `Error from server: ${e}`
+        })
+    }
+}
+
+const getSubjectOfTeacher = async (req, res) => {
+    try {
+        let data = await getAllSubjectTeacher(req.data.teacherPhone)
+        
+        return res.status(200).json(data)
     } catch (e) {
         return res.status(500).json({
             errCode: 4,
@@ -75,7 +161,12 @@ const updateTeacher = async (req, res) => {
 }
 
 module.exports = {
+    getAventuredTeachers,
+    getTeacherProfileData,
     getTeacherInfo,
+    getTeacherStatus,
+    getSubjectOfTeacher,
+    getAllSubjectOfTeacher,
     getAllTeacherClasses,
     getTeacherSubjectsByClass,
     insertNewTeacher,
