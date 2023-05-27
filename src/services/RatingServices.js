@@ -33,7 +33,7 @@ const addRating = ({teacherPhone, studentPhone, idSubject, idClass, rating, comm
             const query = `
                             Insert into "Ratings"  
                             ("teacherPhone", "studentPhone", "idSubject", "idClass", "rating", "comments", "createdAt", "updatedAt")
-                            values	('${teacherPhone}', '${studentPhone}', '${idSubject}', '${idClass}', ${rating}, '${comments}','${getCurrentDatetime}', '${getCurrentDatetime}')
+                            values	('${teacherPhone}', '${studentPhone}', '${idSubject}', '${idClass}', ${rating}, '${comments}','${getCurrentDatetime()})', '${getCurrentDatetime()}')
                         `
             await db.sequelize.query(
                 query

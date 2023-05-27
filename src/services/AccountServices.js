@@ -84,7 +84,7 @@ const insertAccount = (phoneNumber="",password="", role="") => {
     const promise = new Promise(async function(resolve, reject) {
         try {
             const query = `Insert into "Accounts"  
-                          values 	('${phoneNumber}', '${password}', '${role}', '${getCurrentDatetime}', '${getCurrentDatetime}')`
+                          values 	('${phoneNumber}', '${password}', '${role}', '${getCurrentDatetime()}', '${getCurrentDatetime()}')`
             let data = await db.sequelize.query(
                 query
                 , {type: QueryTypes.INSERT}

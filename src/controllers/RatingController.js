@@ -26,11 +26,11 @@ const getAvarageRatingByTeacherPhone = async (req, res) => {
     try {
         let role = req.data.role
         let teacherPhone = req.params.teacherPhone
-        let data = await RatingServices.getAllRatingByTeacherPhone(teacherPhone)
-        let averageRating = data.reduce(function(accumulator, currentValue) {
+        let listRating = await RatingServices.getAllRatingByTeacherPhone(teacherPhone)
+        let rating = listRating.reduce(function(accumulator, currentValue) {
             return accumulator + currentValue.rating;
-          }, 0)/(data.length - 1)
-        return res.status(200).json(averageRating)
+          }, 0)/(listRating.length)
+        return res.status(200).json(rating.toFixed(1))
     } catch (e) {
         return res.status(500).json({
             errCode: 4,

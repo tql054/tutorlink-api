@@ -45,12 +45,11 @@ const getTeacherProfileData = async (req, res) => {
         let listRating = await RatingServices.getAllRatingByTeacherPhone(teacherPhone)
         let rating = listRating.reduce(function(accumulator, currentValue) {
             return accumulator + currentValue.rating;
-          }, 0)/(listRating.length - 1)
-
+          }, 0)/(listRating.length)
         return res.status(200).json({
             teacher,
             listSubject,
-            rating,
+            rating: rating.toFixed(1),
             listRating
         })
     } catch (e) {

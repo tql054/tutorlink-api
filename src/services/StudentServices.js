@@ -134,7 +134,7 @@ const approveStudent = (studentPhone) => {
         try {
             const query = `
                     update	"Students"  
-                    set 	"status" ='Activated', "updatedAt" = '${getCurrentDatetime}'
+                    set 	"status" ='Activated', "updatedAt" = '${getCurrentDatetime()}'
                     where  	"phoneNumber" = '${studentPhone}'
                     `
             let data = await db.sequelize.query(
@@ -154,7 +154,7 @@ const refuseStudent = (studentPhone) => {
         try {
             const query = `
                     update	"Students"  
-                    set 	"status" ='waiting', "updatedAt" = '${getCurrentDatetime}'
+                    set 	"status" ='waiting', "updatedAt" = '${getCurrentDatetime()}'
                     where  	"phoneNumber" = '${studentPhone}'
                     `
             let data = await db.sequelize.query(
@@ -177,7 +177,7 @@ const insertStudent = (idWard, idClass, {phoneNumber, name="", address="", schoo
                     insert into "Students" ("phoneNumber", "name", "address", "idWard", "idClass", "schoolName", 
                             "studentCard", "ability", "transcript", "status", "createdAt", "updatedAt")
                     values	('${phoneNumber}', '${name}', '${address}', ${idWard}, ${idClass}, '${schoolName}', '${studentCard}',
-                            '${ability}', '${transcript}', '${status}', '${getCurrentDatetime}', '${getCurrentDatetime}')
+                            '${ability}', '${transcript}', '${status}', '${getCurrentDatetime()}', '${getCurrentDatetime()}')
                     `
             const data =  await db.sequelize.query(
                 query
@@ -199,7 +199,7 @@ const updateStudent = (idWard, idClass, phoneNumber, {name, address, schoolName,
                     update	"Students"  
                     set 	"name" = '${name}', "address" = '${address}', "idWard" = ${idWard}, "idClass" = ${idClass},
                             "schoolName" = '${schoolName}', "studentCard"= '${studentCard}', "ability" = '${ability}', 
-                            "transcript"='${transcript}', "status"='Not approved', "updatedAt" = '${getCurrentDatetime}'
+                            "transcript"='${transcript}', "status"='Not approved', "updatedAt" = '${getCurrentDatetime()}'
                     where  	"phoneNumber"  = '${phoneNumber}'
                     `
             const data =  await db.sequelize.query(

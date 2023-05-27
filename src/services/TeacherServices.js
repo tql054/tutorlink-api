@@ -152,7 +152,7 @@ const approveTeacher = (teacherPhone) => {
         try {
             const query = `
                     update	"Teachers"  
-                    set 	"status" ='Activated'
+                    set 	"status" ='Activated', "updatedAt" = '${getCurrentDatetime()}'
                     where  	"phoneNumber" = '${teacherPhone}'
                     `
             let data = await db.sequelize.query(
@@ -172,7 +172,7 @@ const refuseTeacher = (teacherPhone) => {
         try {
             const query = `
                     update	"Teachers"  
-                    set 	"status" ='waiting'
+                    set 	"status" ='waiting', "updatedAt" = '${getCurrentDatetime()}'
                     where  	"phoneNumber" = '${teacherPhone}'
                     `
             let data = await db.sequelize.query(
@@ -194,7 +194,7 @@ const insertTeacher = (idWard, {phoneNumber, name="", address="", identify="", l
                     Insert into "Teachers" ("phoneNumber", "name", "address", "idWard", "identify", 
                                             "level", "experience", "status", "createdAt", "updatedAt")
                     values		('${phoneNumber}', '${name}', '${address}', ${idWard}, '${identify}', '${level}',
-                                '${experience}', '${status}', '${getCurrentDatetime}', '${getCurrentDatetime}')`
+                                '${experience}', '${status}', '${getCurrentDatetime()}', '${getCurrentDatetime()}')`
             let data = await db.sequelize.query(
                 query
                 , {type: QueryTypes.INSERT}
@@ -214,7 +214,7 @@ const updateTeacher = (idWard, phoneNumber, { name, address, identify, level, ex
                     update	"Teachers"  
                     set 	"name" = '${name}', "address" = '${address}', "idWard" = ${idWard},
                             "identify" = '${identify}', "level"= '${level}', "experience"= '${experience}',
-                             "status"='${status}, "updatedAt"='${getCurrentDatetime}'
+                             "status"='${status}, "updatedAt"='${getCurrentDatetime()}'
                     where  	"phoneNumber" = '${phoneNumber}'`
             let data = await db.sequelize.query(
                 query
@@ -259,11 +259,11 @@ const getAventuredTeachers = (district="", subject="", classObject="", limit = 5
                             from 	"Teachers" t, "Wards" w , "Districts" d , "SubjectOfTeachers" sot 
                             where 	t."idWard" = w.id and 
                                     w."idDistrict" = d.id and 
-                                    t."phoneNumber" = sot."teacherPhone" 
+                                    t."phoneNumber" = sot."teacherPhone" and
+                                    t.status = 'Activated'
                                     
                                     ${district} ${subject} ${classObject} 
                             limit ${limit} `
-                            // t.status = 'Activated'
             const data =  await db.sequelize.query(
                 query
                 ,{ type: QueryTypes.SELECT }

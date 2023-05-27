@@ -39,9 +39,8 @@ let getHomeData = async (req, res) => {
             case 'GV': {
                 const date = new Date();
                 const dayOfWeek = date.getDay();
-                
                 data.profile = await ProfileServices.getTeacherHomeData(req.data.phoneNumber)
-                data.schedule = await TeachingDateServices.getHomeTeachingDate(req.data.phoneNumber, 'Tư')
+                data.schedule = await TeachingDateServices.getHomeTeachingDate(req.data.phoneNumber, `${getDayName(dayOfWeek)}`)
                 return res.status(200).json({
                     role,
                     profile: data.profile,
