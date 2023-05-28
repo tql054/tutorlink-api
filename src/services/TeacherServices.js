@@ -95,7 +95,7 @@ const getAllNotApprovedTeacher = () => {
                             from "Teachers" t , "Wards" w , "Districts" d 
                             where t."idWard" = w.id and 
                                     w."idDistrict" = d.id and
-                                    t."status" = 'Not approved'  `
+                                    t."status" = 'Not Approved'  `
             const data =  await db.sequelize.query(
                 query
                 ,{ type: QueryTypes.SELECT }
