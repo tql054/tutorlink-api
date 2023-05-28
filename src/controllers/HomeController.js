@@ -84,7 +84,7 @@ let getAdminManageAllTeacher = async (req, res) => {
 let getAdminManageNotApproveTeacher = async (req, res) => {
     try {
         const data = await TeacherServices.getAllNotApprovedTeacher()
-        res.render('teacherPage', {data, status:'not approve'})
+        res.render('teacherPage', {data, status:'Not Approved'})
     } catch (e) {
         return res.status(500).json({
             errCode: 4,
@@ -156,7 +156,7 @@ let getAdminManageStudent= async (req, res) => {
 let getAdminManageNotApproveStudent = async (req, res) => {
     try {
         const data = await StudentServices.getAllNotApprovedStudent()
-        res.render('studentPage', {data, status:'not approve'})
+        res.render('studentPage', {data, status:'Not approved'})
     } catch (e) {
         return res.status(500).json({
             errCode: 4,
