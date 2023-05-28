@@ -31,6 +31,8 @@ const getAvarageRatingByTeacherPhone = async (req, res) => {
         let rating = listRating.reduce(function(accumulator, currentValue) {
             return accumulator + currentValue.rating;
           }, 0)/(listRatingSize)
+          console.log(`rating: ${rating}`)
+          console.log(`size: ${listRatingSize}`)
         return res.status(200).json(rating.toFixed(1))
     } catch (e) {
         return res.status(500).json({
