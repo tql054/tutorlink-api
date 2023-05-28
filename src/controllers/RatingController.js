@@ -27,9 +27,10 @@ const getAvarageRatingByTeacherPhone = async (req, res) => {
         let role = req.data.role
         let teacherPhone = req.params.teacherPhone
         let listRating = await RatingServices.getAllRatingByTeacherPhone(teacherPhone)
+        let listRatingSize = listRating.length<=0?0:listRating.length
         let rating = listRating.reduce(function(accumulator, currentValue) {
             return accumulator + currentValue.rating;
-          }, 0)/(listRating.length)
+          }, 0)/(listRatingSize)
         return res.status(200).json(rating.toFixed(1))
     } catch (e) {
         return res.status(500).json({
