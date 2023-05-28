@@ -149,7 +149,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                                         <td><%=teacher.experience%> năm</td> 
                                         <td><%=teacher.status%></td> 
                                         <td class="d-flex">
-                                            <%if(teacher.status === 'Not approved') {%>
+                                            <%if(teacher.status === 'Not Approved') {%>
                                                 <button class="btn btn-success ativate-teacher">
                                                     <a href="/teacher/approve/<%=teacher.phoneNumber%>">Duyệt</a>
                                                 </button>
