@@ -2,7 +2,11 @@ import {} from '../services/TeachingDateServices'
 
 const getCurrentDatetime = () => {
     const currentdate = new Date()
-    return currentdate.getDate() + "/" + (currentdate.getMonth() + 1) 
+    let currentDay = currentdate.getDate()
+    let currentMonth = currentdate.getMonth() + 1
+    if(currentDay< 10) currentDay = `0${currentDay}`
+    if(currentMonth< 10) currentMonth = `0${currentDay}`
+    return currentDay + "/" + currentMonth
     + "/" + currentdate.getFullYear()
 }
 
