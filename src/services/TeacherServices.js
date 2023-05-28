@@ -214,7 +214,7 @@ const updateTeacher = (idWard, phoneNumber, { name, address, identify, level, ex
                     update	"Teachers"  
                     set 	"name" = '${name}', "address" = '${address}', "idWard" = ${idWard},
                             "identify" = '${identify}', "level"= '${level}', "experience"= '${experience}',
-                             "status"='${status}, "updatedAt"='${getCurrentDatetime()}'
+                             "status"='${status}', "updatedAt"='${getCurrentDatetime()}'
                     where  	"phoneNumber" = '${phoneNumber}'`
             let data = await db.sequelize.query(
                 query
