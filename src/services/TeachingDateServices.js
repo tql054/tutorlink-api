@@ -119,6 +119,28 @@ const getCurrentTeachingTimes = (teacherPhone='', dayOfWeek='Hai') => {
     return promise
 }
 
+const getByStudentPhone = (studentPhone='', dayOfWeek='Hai') => {
+    const promise = new Promise(async function(resolve, reject) {
+        try {
+            console.log("data: ", studentPhone)
+            const query = `
+                select "timeBegin", "duration" 
+                from "TeachingDates" td 
+                where 	td."studentPhone" = '${studentPhone}' and 
+                td."dayOfWeek"  = '${dayOfWeek}'
+            `
+            let data = await db.sequelize.query(
+                query,
+                {type: QueryTypes.SELECT}
+            )
+            resolve(data)
+        } catch(e) {
+            reject(e)
+        }
+    })
+    return promise
+}
+
 const registerTeachingDate = (studentPhone="", idClass, idSubject, {teacherPhone, dayOfWeek, timeBegin}) => {
     const promise = new Promise(async function(resolve, reject) {
         try {
@@ -275,6 +297,7 @@ module.exports = {
     insertTeachingDate,
     deleteTeachingDate,
     getCurrentTeachingTimes,
+    getByStudentPhone,
     registerTeachingDate,
     shutDownTeachingDate,
     unregisterTeachingDate,

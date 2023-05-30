@@ -43,6 +43,10 @@ let initWebRoutes = (app) => {
     router.get('/teaching-schedule/:timeBegin/:duration/:dow/:token', AuthorMidleware.checkUser, 
                 TeachingDateMidleware.checkTeachingTime, 
                 validateTeachingTime)
+
+    router.get('/teaching-schedule/validate/:timeBegin/:duration/:dow/:token', AuthorMidleware.checkUser, 
+                TeachingDateMidleware.checkStudentTeachingTime, 
+                validateTeachingTime)
     router.put('/teaching-schedule/register/:idSubject/:idClass/:token', AuthorMidleware.checkUser, registerTeachingDate)
     router.put('/teaching-schedule/shutdown/:token', AuthorMidleware.checkUser, shutDownTeachingDate)
     router.put('/teaching-schedule/unactive/:token', AuthorMidleware.checkUser, unregisterTeachingDate)
