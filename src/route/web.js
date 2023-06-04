@@ -19,6 +19,7 @@ import TeachingDateMidleware from '../midlewares/TeachingDateMidleware'
 import TeacherProfileController from '../controllers/TeacherProfileController'
 import StudentProfileController from '../controllers/StudentProfileController'
 import RatingController from '../controllers/RatingController'
+import PaymentController from '../controllers/PaymentController'
 
 let router =  express.Router()
 
@@ -109,6 +110,9 @@ let initWebRoutes = (app) => {
     router.get('/rating/page/:teacherPhone/:token', AuthorMidleware.checkUser, RatingController.getRatingPageData)
     router.get('/rating/avg/:teacherPhone/:token', AuthorMidleware.checkUser, RatingController.getAvarageRatingByTeacherPhone)
     router.post('/rating/:dow/:timeBegin/:token', AuthorMidleware.checkUser, RatingController.addRating)
+
+    // Payment side
+    router.post('/payment-teachingdate/:token', AuthorMidleware.checkUser, PaymentController.addTeachingDatePayment)
 
     return app.use('/', router)
 }
