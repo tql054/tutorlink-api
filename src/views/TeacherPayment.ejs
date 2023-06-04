@@ -108,69 +108,33 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                     <div class="panel panel-primary">
                         <div class="panel-heading"
                             style="font-size: 2rem; margin-bottom: 20px;">
-                            <%if(status === 'Not Approved') {%>
-                                Danh sách tất cả gia sư đang chờ duyệt trên hệ thống
-                            <%}%>
-
-                            <%if(status === 'waiting'){%>
-                                Danh sách tất cả gia sư chưa cập nhật thông tin trên hệ thống
-                            <%}%>
-
-                            <%if(status === 'activated'){%>
-                                Danh sách tất cả gia sư đang hoạt động trên hệ thống
-                            <%}%>
+                                Lịch sử thanh toán của gia sư: <%=teacherInfo.name%> - <%=teacherInfo.phoneNumber%>
                         </div> 
                         
                         <div class="table-responsive"> 
                         <table class="table table-striped b-t b-light" id="myTable"> 
                             <thead> 
                             <tr> 
-                                <th>Họ tên</th> 
-                                <th>Số điện thoại</th> 
-                                <th>Số nhà</th> 
-                                <th>Địa chỉ</th> 
-                                <th>Trình độ</th> 
-                                <th>Kinh nghiệm</th> 
-                                <th>Trạng thái</th> 
-                                <th>Thao tác</th> 
+                                <th>Payment Id</th> 
+                                <th>Thứ</th> 
+                                <th>Thời gian bắt đầu</th> 
+                                <th>Thời lượng buổi học</th> 
+                                <th>Thời gian đăng ký</th>
+                                <th>Tổng tiền(VND)</th>
                             </tr> 
                             </thead> 
 
                             <tbody> 
                                 <%
-                                    data.forEach(teacher => {
+                                    data.forEach(payment => {
                                     %>
                                     <tr> 
-                                        <td><h4><%=teacher.name%></h4></td> 
-                                        <td><%=teacher.phoneNumber%></td> 
-                                        <td><%=teacher.address%></td> 
-                                        <td><%=teacher.wardName%>, <%=teacher.districtName%></td> 
-                                        <td><%=teacher.level%></td> 
-                                        <td><%=teacher.experience%> năm</td> 
-                                        <td><%=teacher.status%></td> 
-                                        <td class="d-flex">
-                                            <%if(teacher.status === 'Activated'){%>
-                                                <button class="btn btn-info">
-                                                    <a class="text-white" href="/payment-teacher/teaching-date/<%=teacher.phoneNumber%>">Lịch sử thanh toán</a>
-                                                </button>
-                                            <%}%>
-
-                                            <%if(teacher.status === 'Not Approved') {%>
-                                                <button class="btn btn-success ativate-teacher">
-                                                    <a href="/teacher/approve/<%=teacher.phoneNumber%>">Duyệt</a>
-                                                </button>
-
-                                                <button class="btn btn-warning">
-                                                    <a href="/teacher/refuse/<%=teacher.phoneNumber%>">Từ chối</a>
-                                                </button>
-                                            <%}%>
-
-                                            <%if(teacher.status === 'waiting'){%>
-                                                <button class="btn btn-danger">
-                                                    <a href="/teacher/waiting/delete/<%=teacher.phoneNumber%>">Xóa</a>
-                                                </button>
-                                            <%}%>
-                                        </td>
+                                        <td><h4><%=payment.paymentId%></h4></td> 
+                                        <td><%=payment.dayOfWeek%></td> 
+                                        <td><%=payment.timeBegin%></td> 
+                                        <td><%=payment.duration%></td> 
+                                        <td><%=payment.createdAt%></td> 
+                                        <td><%=payment.amount%></td> 
                                     </tr> 
                                     <%
                                 })

@@ -8,6 +8,9 @@ h4, h5, h6,
 h1, h2, h3 {margin: 0;}
 ul, ol {margin: 0;}
 p {margin: 0;}
+a {
+    color: white;
+}
 
 html, body{
 	font-family: 'Roboto', sans-serif;

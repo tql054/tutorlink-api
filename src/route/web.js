@@ -113,6 +113,7 @@ let initWebRoutes = (app) => {
 
     // Payment side
     router.post('/payment-teachingdate/:token', AuthorMidleware.checkUser, PaymentController.addTeachingDatePayment)
+    router.get('/payment-teacher/teaching-date/:teacherPhone', AuthorMidleware.checkAdmin, PaymentController.getAllPaymentByTeacher)
 
     return app.use('/', router)
 }

@@ -21,6 +21,26 @@ let insertPayMent = (teacherPhone, {paymentId, dayOfWeek, timeBegin, duration, a
     return promise
 }
 
+let getAllPaymentByTeacher = (teacherPhone) => {
+    const promise = new Promise(async function(resolve, reject) {
+        try {
+            let query = `   select 	"paymentId" ,"dayOfWeek" , "timeBegin" , duration ,"createdAt", "amount"  
+                            from 	"PaymentTeachingDates" ptd
+                            where 	"teacherPhone" = '${teacherPhone}'
+                            `
+            const data =  await db.sequelize.query(
+                query
+                ,{ type: QueryTypes.SELECT }
+            )
+            resolve(data)
+        } catch(e) {
+            reject(e)
+        }
+    })
+    return promise
+}
+
 module.exports = {
-    insertPayMent
+    insertPayMent,
+    getAllPaymentByTeacher
 }
