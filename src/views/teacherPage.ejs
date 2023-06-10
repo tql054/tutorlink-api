@@ -122,65 +122,107 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                         </div> 
                         
                         <div class="table-responsive"> 
-                        <table class="table table-striped b-t b-light" id="myTable"> 
-                            <thead> 
-                            <tr> 
-                                <th>Họ tên</th> 
-                                <th>Số điện thoại</th> 
-                                <th>Số nhà</th> 
-                                <th>Địa chỉ</th> 
-                                <th>Trình độ</th> 
-                                <th>Kinh nghiệm</th> 
-                                <th>Trạng thái</th> 
-                                <th>Thao tác</th> 
-                            </tr> 
-                            </thead> 
-
-                            <tbody> 
-                                <%
-                                    data.forEach(teacher => {
-                                    %>
-                                    <tr> 
-                                        <td><h4><%=teacher.name%></h4></td> 
-                                        <td><%=teacher.phoneNumber%></td> 
-                                        <td><%=teacher.address%></td> 
-                                        <td><%=teacher.wardName%>, <%=teacher.districtName%></td> 
-                                        <td><%=teacher.level%></td> 
-                                        <td><%=teacher.experience%> năm</td> 
-                                        <td><%=teacher.status%></td> 
-                                        <td class="d-flex">
-                                            <%if(teacher.status === 'Activated'){%>
-                                                <button class="btn btn-info">
-                                                    <a class="text-white" href="/payment-teacher/teaching-date/<%=teacher.phoneNumber%>">Lịch sử thanh toán</a>
-                                                </button>
-                                            <%}%>
-
-                                            <%if(teacher.status === 'Not Approved') {%>
-                                                <button class="btn btn-success ativate-teacher">
-                                                    <a href="/teacher/approve/<%=teacher.phoneNumber%>">Duyệt</a>
-                                                </button>
-
-                                                <button class="btn btn-warning">
-                                                    <a href="/teacher/refuse/<%=teacher.phoneNumber%>">Từ chối</a>
-                                                </button>
-                                            <%}%>
-
-                                            <%if(teacher.status === 'waiting'){%>
-                                                <button class="btn btn-danger">
-                                                    <a href="/teacher/waiting/delete/<%=teacher.phoneNumber%>">Xóa</a>
-                                                </button>
-                                            <%}%>
-                                        </td>
-                                    </tr> 
-                                    <%
-                                })
-                                    %>
-                            </tbody> 
-                        </table> 
+                            <table id="example" class="display" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Họ tên</th> 
+                                        <th>Số điện thoại</th> 
+                                        <th>Số nhà</th> 
+                                        <th>Địa chỉ</th> 
+                                        <th>Trình độ</th> 
+                                        <th>Kinh nghiệm</th> 
+                                        <th>Trạng thái</th> 
+                                        <th>Thao tác</th> 
+                                    </tr>
+                                </thead>
+                            </table>
                         </div> 
                     </div>
                 </section>
             </section>
         </section>
     </body>
+    <script>
+        var dataSet = '<%-JSON.stringify(data) %>';
+        var dataStatus = '<%-JSON.stringify(status) %>'
+        var data = JSON.parse(dataSet)
+        var status = JSON.parse(dataStatus)
+        $(document).ready(function () {
+            var arr = []
+            data.forEach(element => {
+                arr.push([element.name, element.phoneNumber, element.address, 
+                        `${element.wardName}, ${element.districtName}`, element.level, element.experience, element.status]
+                        
+                        )
+            });
+
+            $(document).ready(function () {
+                if(status === "activated") {
+                    var table = $('#example').DataTable({
+                        data: arr,
+                        columnDefs: [
+                            {
+                                targets: -1,
+                                data: null,
+                                defaultContent: `<button class="btn btn-info">
+                                                        Lịch sử thanh toán
+                                                    </button>`,
+                            }
+                        ],
+                    });
+
+                    $('#example tbody').on('click', '.btn', function () {
+                        var data = table.row($(this).parents('tr')).data();
+                        window.location = `https://tutor-link.onrender.com/payment-teacher/teaching-date/${data[1]}`
+                    });
+                }
+
+                if(status === "Not Approved") {
+                    var table = $('#example').DataTable({
+                        data: arr,
+                        columnDefs: [
+                            {
+                                targets: -1,
+                                data: null,
+                                defaultContent: `<button class="btn approved btn-success ativate-teacher">">Duyệt
+                                                </button>
+
+                                                <button class="btn refuse btn-warning">Từ chối
+                                                </button>`,
+                            }
+                        ],
+                    });
+
+                    $('#example tbody').on('click', '.approved', function () {
+                        var data = table.row($(this).parents('tr')).data();
+                        window.location = `https://tutor-link.onrender.com/teacher/approve/${data[1]}`
+                    });
+
+                    $('#example tbody').on('click', '.refuse', function () {
+                        var data = table.row($(this).parents('tr')).data();
+                        window.location = `https://tutor-link.onrender.com/teacher/refuse/${data[1]}`
+                    });
+                }
+                
+                if(status === "waiting") {
+                    var table = $('#example').DataTable({
+                        data: arr,
+                        columnDefs: [
+                            {
+                                targets: -1,
+                                data: null,
+                                defaultContent: `<button class="btn btn-danger">Xóa
+                                                </button>`,
+                            }
+                        ],
+                    });
+
+                    $('#example tbody').on('click', '.btn', function () {
+                        var data = table.row($(this).parents('tr')).data();
+                        window.location = `https://tutor-link.onrender.com/waiting/delete/${data[1]}`
+                    });
+                }
+            });
+        });
+    </script>
 </html>

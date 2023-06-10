@@ -108,7 +108,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                 <div class="panel panel-primary">
                     <div class="panel-heading"
                         style="font-size: 2rem; margin-bottom: 20px;">
-                        <%if(status === 'not approve') {%>
+                        <%if(status === 'Not Approved') {%>
                             Danh sách tất cả học viên đang chờ duyệt trên hệ thống
                         <%}%>
 
@@ -120,64 +120,103 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                             Danh sách tất cả học viên đang hoạt động trên hệ thống
                         <%}%>
                     </div> 
-                    
+
                     <div class="table-responsive"> 
-                    <table class="table table-striped b-t b-light" id="myTable"> 
-                        <thead> 
-                        <tr> 
-                            <th>Họ tên</th> 
-                            <th>Số điện thoại</th> 
-                            <th>Số nhà</th> 
-                            <th>Địa chỉ</th> 
-                            <th>Lớp</th> 
-                            <th>Trường</th> 
-                            <th>Học lực</th> 
-                            <th>Trạng thái</th> 
-                            <th>Thao tác</th> 
-                        </tr> 
-                        </thead> 
-
-                        <tbody> 
-                            <%
-                                data.forEach(student => {
-                                %>
-                                <tr> 
-                                    <td><h4><%=student.name%></h4></td> 
-                                    <td><%=student.phoneNumber%></td> 
-                                    <td><%=student.address%></td> 
-                                    <td><%=student.wardName%>, <%=student.districtName%></td> 
-                                    <td><%=student.className%></td> 
-                                    <td><%=student.schoolName%></td> 
-                                    <td><%=student.ability%></td> 
-                                    <td><%=student.status%></td> 
-                                    <td class="d-flex">
-                                        <%if(student.status === 'Not approved') {%>
-                                            <button class="btn btn-success">
-                                                <a href="/student/approve/<%=student.phoneNumber%>">Duyệt</a>
-                                            </button>
-
-                                            <button class="btn btn-warning">
-                                                <a href="/student/refuse/<%=student.phoneNumber%>">Từ chối</a>
-                                            </button>
-                                        <%}%>
-
-                                        <%if(student.status === 'waiting'){%>
-                                            <button class="btn btn-danger">
-                                                <a href="/student/waiting/delete/<%=student.phoneNumber%>">Xóa</a>
-                                            </button>
-                                        <%}%>
-                                    </td>
-                                </tr> 
-                                <%
-                            })
-                                %>
-                        </tbody> 
-                    </table> 
+                        <table id="example" class="display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Họ tên</th> 
+                                    <th>Số điện thoại</th> 
+                                    <th>Số nhà</th> 
+                                    <th>Địa chỉ</th> 
+                                    <th>Lớp</th> 
+                                    <th>Trường</th> 
+                                    <th>Học lực</th> 
+                                    <th>Trạng thái</th> 
+                                    <th>Thao tác</th> 
+                                </tr>
+                            </thead>
+                        </table>
                     </div> 
                 </div> 
             </section>
         </section>
     </section>
 </body>
+<script>
+    var dataSet = '<%-JSON.stringify(data) %>';
+    var dataStatus = '<%-JSON.stringify(status) %>'
+    var data = JSON.parse(dataSet)
+    var status = JSON.parse(dataStatus)
+    $(document).ready(function () {
+        var arr = []
+        data.forEach(element => {
+            arr.push([element.name, element.phoneNumber, element.address, 
+                    `${element.wardName}, ${element.districtName}`, element.className, element.schoolName, element.ability, element.status]
+                    
+                    )
+        });
 
+        $(document).ready(function () {
+            if(status === "activated") {
+                var table = $('#example').DataTable({
+                    data: arr,
+                    columnDefs: [
+                        {
+                            targets: -1,
+                            data: null,
+                            defaultContent: ``,
+                        }
+                    ],
+                });
+            }
+
+            if(status === "Not Approved") {
+                var table = $('#example').DataTable({
+                    data: arr,
+                    columnDefs: [
+                        {
+                            targets: -1,
+                            data: null,
+                            defaultContent: `<button class="btn approved btn-success">Duyệt
+                                            </button>
+
+                                            <button class="btn refuse btn-warning">Từ chối
+                                            </button>`,
+                        }
+                    ],
+                });
+
+                $('#example tbody').on('click', '.approved', function () {
+                    var data = table.row($(this).parents('tr')).data();
+                    window.location = `https://tutor-link.onrender.com/student/approve/${data[1]}`
+                });
+
+                $('#example tbody').on('click', '.refuse', function () {
+                    var data = table.row($(this).parents('tr')).data();
+                    window.location = `https://tutor-link.onrender.com/student/refuse/${data[1]}`
+                });
+            }
+            
+            if(status === "waiting") {
+                var table = $('#example').DataTable({
+                    data: arr,
+                    columnDefs: [
+                        {
+                            targets: -1,
+                            data: null,
+                            defaultContent: `<button class="btn btn-danger">Xóa
+                                            </button>`,
+                        }
+                    ],
+                });
+
+                $('#example tbody').on('click', '.btn', function () {
+                    var data = table.row($(this).parents('tr')).data();
+                    window.location = `https://tutor-link.onrender.com/student/waiting/delete/${data[1]}`
+                });
+            }
+        });
+    });
+</script>
 </html>
