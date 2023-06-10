@@ -75,8 +75,30 @@ const getAllActiveTeacher = () => {
                             where t."idWard" = w.id and 
                                     w."idDistrict" = d.id and
                                     t."status" = 'Activated'
+                            order by t."createdAt" desc`
+            const data =  await db.sequelize.query(
+                query
+                ,{ type: QueryTypes.SELECT }
+            )
+            resolve(data) // alternative by data objects
+        } catch(e) {
+            reject(e)
+        }
+    })
+    return promise
+}
+
+const getTopAllActiveTeacher = () => {
+    const promise = new Promise(async function(resolve, reject) {
+        try {
+            // get latest post
+            let query = `   select "phoneNumber" , "name" , "address" , "wardName" , d."districtName" , "identify" , "level" , "experience" , "status"  
+                            from "Teachers" t , "Wards" w , "Districts" d 
+                            where t."idWard" = w.id and 
+                                    w."idDistrict" = d.id and
+                                    t."status" = 'Activated'
                             order by t."createdAt" desc
-                            limit 5'  `
+                            limit 5`
             const data =  await db.sequelize.query(
                 query
                 ,{ type: QueryTypes.SELECT }
@@ -334,5 +356,6 @@ module.exports = {
     updateTeacher,
     getAventuredTeachers,
     getAllSubjects,
-    getAllSubjectsByClass
+    getAllSubjectsByClass,
+    getTopAllActiveTeacher
 }

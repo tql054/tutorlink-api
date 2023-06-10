@@ -26,7 +26,7 @@ let getHomeData = async (req, res) => {
         switch(role) {
             case 'HS': {
                 data.profile = await ProfileServices.getStudentHomeData(req.data.phoneNumber)
-                data.latestTeachers = await TeacherServices.getAllActiveTeacher()
+                data.latestTeachers = await TeacherServices.getTopAllActiveTeacher()
                 data.mostRatingTeachers = await TeacherServices.getMostRatingTeachers()
                 return res.status(200).json({
                     role,
